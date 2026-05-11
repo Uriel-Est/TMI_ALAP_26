@@ -10,14 +10,14 @@
 #   (2) tmi_latam_onu_NOVO.csv            -> países LATAM (2000–2023)
 #
 # Gera:
-#   - outputs_tmi/tmi_comparativo.xlsx
-#   - graficos/*.png
+#   - outputs_tmi_final/tmi_comparativo_final.xlsx
+#   - graficos_final/*.png
 # ------------------------------------------------------------
 
 # =========================
 # 0) Caminhos (AJUSTE AQUI)
 # =========================
-main_folder <- "SEU/CAMINHO" #Edite para a sua pasta raíz do RProject
+main_folder <- "C:/Users/uriel/Documents/UFPB Estatística/ALAP 2026/TMI"
 main_folder <- normalizePath(main_folder, winslash = "/", mustWork = FALSE)
 
 brasil_tmi <- file.path(main_folder, "brasil_00_24.xlsx")
@@ -37,7 +37,7 @@ pkgs <- c(
   "ggplot2", "openxlsx",
   "sf", "geobr",
   "rnaturalearth", "rnaturalearthdata",
-  "ggrepel", "viridis", "patchwork", "purrr"
+  "ggrepel", "viridis", "patchwork", "purrr", "tibble"
 )
 
 missing_pkgs <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
@@ -283,14 +283,50 @@ if (start_common <= 2019 && latest_year >= 2019) {
 #      Estagnação/reversão dentro de trajetória geral de queda
 # =========================
 
-# Parâmetros
-limiar_estagnacao <- 0.1   # |ΔTMI| <= 0.1 = estagnação
-min_duracao_anos  <- 1     # intervalo mínimo: n -> n+1
-max_duracao_anos  <- Inf   # pode limitar, ex.: 8
+# Parâmetros principais
+# Observação: a TMI está em óbitos <1 ano por 1.000 nascidos vivos.
+# Assim, delta_tmi é variação absoluta da taxa, não ponto percentual.
+limiar_estagnacao   <- 0.1    # |ΔTMI| <= 0.1 = estagnação prática
+min_duracao_anos    <- 1      # intervalo mínimo: n -> n+1
+max_duracao_anos    <- Inf    # pode limitar, ex.: 8
+
+# Parâmetros para diagnóstico de sequência / comportamento assintótico empírico
+# Como a série é finita, estes indicadores não provam limite matemático verdadeiro.
+# Eles aproximam: estabilidade de cauda, monotonicidade, alternância e tendência log-linear.
+tail_n              <- 5      # últimos anos usados como "cauda" da sequência
+epsilon_cauda       <- 0.3    # amplitude máxima da cauda para diagnóstico tipo Cauchy empírico
+limiar_slope_log    <- 0.002  # tolerância para inclinação log-linear próxima de zero
+
+parametros_analise <- tibble::tibble(
+  parametro = c(
+    "limiar_estagnacao",
+    "min_duracao_anos",
+    "max_duracao_anos",
+    "tail_n",
+    "epsilon_cauda",
+    "limiar_slope_log"
+  ),
+  valor = c(
+    as.character(limiar_estagnacao),
+    as.character(min_duracao_anos),
+    as.character(max_duracao_anos),
+    as.character(tail_n),
+    as.character(epsilon_cauda),
+    as.character(limiar_slope_log)
+  ),
+  interpretacao = c(
+    "Limiar absoluto para classificar estagnação prática da TMI",
+    "Menor intervalo temporal testado na varredura de janelas",
+    "Maior intervalo temporal testado na varredura de janelas",
+    "Tamanho da cauda usada para estabilidade/convergência empírica",
+    "Amplitude máxima da cauda para classificar estabilidade tipo Cauchy empírica",
+    "Tolerância para considerar a inclinação log-linear assintoticamente nula"
+  )
+)
 
 # Base limpa
 base_janelas <- pool |>
-  dplyr::filter(!is.na(tmi)) |>
+  dplyr::filter(!is.na(tmi), is.finite(tmi)) |>
   dplyr::arrange(type, unit, year) |>
   dplyr::group_by(type, unit) |>
   dplyr::mutate(row_id = dplyr::row_number()) |>
@@ -309,9 +345,9 @@ tendencia_geral <- base_janelas |>
     delta_geral_tmi   = tmi_final_serie - tmi_inicial_serie,
     delta_geral_pct   = 100 * (tmi_final_serie / tmi_inicial_serie - 1),
     trajetoria_geral  = dplyr::case_when(
-      delta_geral_tmi < 0 ~ "Queda geral",
       abs(delta_geral_tmi) <= limiar_estagnacao ~ "Estagnação geral",
-      delta_geral_tmi > 0 ~ "Aumento geral",
+      delta_geral_tmi < -limiar_estagnacao ~ "Queda geral",
+      delta_geral_tmi > limiar_estagnacao ~ "Aumento geral",
       TRUE ~ NA_character_
     ),
     .groups = "drop"
@@ -354,15 +390,16 @@ janelas_tmi <- base_janelas |>
       TRUE ~ "Indefinido"
     )
   ) |>
-  dplyr::left_join(tendencia_geral, by = c("type", "unit"))
+  dplyr::left_join(tendencia_geral, by = c("type", "unit")) |>
+  dplyr::mutate(
+    episodio_local_contra_tendencia = trajetoria_geral == "Queda geral" &
+      classificacao %in% c("Estagnação", "Reversão")
+  )
 
 # Episódios locais relevantes:
 # estagnação ou reversão dentro de uma trajetória geral de queda
 episodios_locais <- janelas_tmi |>
-  dplyr::filter(
-    trajetoria_geral == "Queda geral",
-    classificacao %in% c("Estagnação", "Reversão")
-  ) |>
+  dplyr::filter(episodio_local_contra_tendencia) |>
   dplyr::arrange(type, unit, ano_inicio, ano_fim)
 
 # Reversões principais por unidade
@@ -406,6 +443,174 @@ ranking_anos_inicio_regioes <- ranking_anos_inicio |>
   dplyr::filter(type == "Região BR") |>
   dplyr::arrange(classificacao, desc(n_unidades), desc(n_janelas), ano_inicio)
 
+episodios_resumo_unidade <- episodios_locais |>
+  dplyr::group_by(type, unit) |>
+  dplyr::summarise(
+    n_janelas_locais = dplyr::n(),
+    n_reversoes = sum(classificacao == "Reversão", na.rm = TRUE),
+    n_estagnacoes = sum(classificacao == "Estagnação", na.rm = TRUE),
+    maior_delta_reversao = if (any(classificacao == "Reversão")) {
+      max(delta_tmi[classificacao == "Reversão"], na.rm = TRUE)
+    } else NA_real_,
+    janela_maior_reversao = if (any(classificacao == "Reversão")) {
+      idx <- which.max(ifelse(classificacao == "Reversão", delta_tmi, -Inf))
+      paste0(ano_inicio[idx], "–", ano_fim[idx])
+    } else NA_character_,
+    maior_duracao_estagnacao = if (any(classificacao == "Estagnação")) {
+      max(duracao_anos[classificacao == "Estagnação"], na.rm = TRUE)
+    } else NA_real_,
+    janela_maior_estagnacao = if (any(classificacao == "Estagnação")) {
+      idx <- which.max(ifelse(classificacao == "Estagnação", duracao_anos, -Inf))
+      paste0(ano_inicio[idx], "–", ano_fim[idx])
+    } else NA_character_,
+    .groups = "drop"
+  ) |>
+  dplyr::arrange(type, desc(n_reversoes), desc(n_estagnacoes), unit)
+
+# =========================
+# 7.2) Diagnóstico de sequências e comportamento assintótico empírico
+# =========================
+
+classifica_monotonia <- function(x, tol = limiar_estagnacao) {
+  dx <- diff(x)
+  if (length(dx) == 0) return("Série curta")
+  if (all(abs(dx) <= tol, na.rm = TRUE)) return("Aproximadamente constante")
+  if (all(dx <= tol, na.rm = TRUE) && any(dx < -tol, na.rm = TRUE)) return("Monótona decrescente fraca")
+  if (all(dx >= -tol, na.rm = TRUE) && any(dx > tol, na.rm = TRUE)) return("Monótona crescente fraca")
+  "Não monotônica"
+}
+
+safe_lm_slope <- function(formula, data) {
+  out <- tryCatch(
+    stats::coef(stats::lm(formula, data = data))[2],
+    error = function(e) NA_real_,
+    warning = function(w) suppressWarnings(stats::coef(stats::lm(formula, data = data))[2])
+  )
+  unname(as.numeric(out))
+}
+
+calc_seq_diag <- function(df) {
+  df <- df |>
+    dplyr::filter(!is.na(tmi), is.finite(tmi), !is.na(year)) |>
+    dplyr::arrange(year)
+  
+  n <- nrow(df)
+  if (n < 2) {
+    return(tibble::tibble(
+      type = dplyr::first(df$type), unit = dplyr::first(df$unit),
+      n_obs = n, ano_inicio = dplyr::first(df$year), ano_fim = dplyr::last(df$year),
+      tmi_inicio = dplyr::first(df$tmi), tmi_fim = dplyr::last(df$tmi),
+      delta_total = NA_real_, delta_total_pct = NA_real_,
+      monotonia = "Série curta", n_alternancias_sinal = NA_integer_,
+      prop_anos_reversao = NA_real_, prop_anos_estagnacao = NA_real_,
+      limite_empirico_cauda = NA_real_, sd_cauda = NA_real_, amplitude_cauda = NA_real_,
+      max_dif_cauda = NA_real_, cauchy_empirico = NA,
+      slope_linear = NA_real_, slope_log = NA_real_, tail_slope_log = NA_real_,
+      taxa_media_log_anual = NA_real_, razao_media_cauda = NA_real_,
+      limite_modelo_loglinear = "Indefinido", classe_convergencia_empirica = "Série curta",
+      comportamento_subsequencias = "Série curta"
+    ))
+  }
+  
+  dx <- diff(df$tmi)
+  dx_class <- dplyr::case_when(
+    abs(dx) <= limiar_estagnacao ~ 0,
+    dx > limiar_estagnacao ~ 1,
+    dx < -limiar_estagnacao ~ -1,
+    TRUE ~ NA_real_
+  )
+  dx_nonzero <- dx_class[!is.na(dx_class) & dx_class != 0]
+  n_alternancias <- if (length(dx_nonzero) >= 2) sum(dx_nonzero[-1] != dx_nonzero[-length(dx_nonzero)]) else 0L
+  
+  tail_df <- df |>
+    dplyr::slice_tail(n = min(tail_n, n))
+  
+  n_tail <- nrow(tail_df)
+  tail_range <- max(tail_df$tmi, na.rm = TRUE) - min(tail_df$tmi, na.rm = TRUE)
+  max_dif_tail <- if (n_tail >= 2) max(abs(stats::dist(tail_df$tmi)), na.rm = TRUE) else NA_real_
+  
+  slope_linear <- safe_lm_slope(tmi ~ year, df)
+  slope_log <- if (all(df$tmi > 0)) safe_lm_slope(log(tmi) ~ year, df) else NA_real_
+  tail_slope_log <- if (n_tail >= 3 && all(tail_df$tmi > 0)) safe_lm_slope(log(tmi) ~ year, tail_df) else NA_real_
+  
+  razoes <- df$tmi[-1] / df$tmi[-n]
+  razao_media_cauda <- if (length(razoes) >= 1) {
+    mean(utils::tail(razoes, min(tail_n - 1, length(razoes))), na.rm = TRUE)
+  } else NA_real_
+  
+  cauchy_empirico <- is.finite(tail_range) && tail_range <= epsilon_cauda
+  
+  limite_modelo_loglinear <- dplyr::case_when(
+    is.na(slope_log) ~ "Indefinido",
+    slope_log < -limiar_slope_log ~ "Convergente para 0 no modelo log-linear",
+    abs(slope_log) <= limiar_slope_log ~ "Estável com limite positivo aproximado no modelo log-linear",
+    slope_log > limiar_slope_log ~ "Divergente/crescente no modelo log-linear",
+    TRUE ~ "Indefinido"
+  )
+  
+  classe_convergencia <- dplyr::case_when(
+    isTRUE(cauchy_empirico) && !is.na(tail_slope_log) && abs(tail_slope_log) <= limiar_slope_log ~
+      "Cauda estável / convergência empírica",
+    !is.na(tail_slope_log) && tail_slope_log > limiar_slope_log ~
+      "Cauda com reversão ou divergência local",
+    !is.na(tail_slope_log) && tail_slope_log < -limiar_slope_log ~
+      "Ainda em queda / convergência em curso",
+    isTRUE(cauchy_empirico) ~
+      "Cauda estável por amplitude",
+    TRUE ~ "Indefinido"
+  )
+  
+  comportamento_subseq <- dplyr::case_when(
+    classifica_monotonia(df$tmi) %in% c("Monótona decrescente fraca", "Aproximadamente constante") && isTRUE(cauchy_empirico) ~
+      "Subsequências de cauda estáveis",
+    n_alternancias >= 3 ~
+      "Subsequências alternantes/irregulares",
+    mean(dx_class == 1, na.rm = TRUE) > 0 ~
+      "Subsequências com reversões locais",
+    TRUE ~ "Subsequências majoritariamente descendentes"
+  )
+  
+  tibble::tibble(
+    type = dplyr::first(df$type),
+    unit = dplyr::first(df$unit),
+    n_obs = n,
+    ano_inicio = dplyr::first(df$year),
+    ano_fim = dplyr::last(df$year),
+    tmi_inicio = dplyr::first(df$tmi),
+    tmi_fim = dplyr::last(df$tmi),
+    delta_total = dplyr::last(df$tmi) - dplyr::first(df$tmi),
+    delta_total_pct = 100 * (dplyr::last(df$tmi) / dplyr::first(df$tmi) - 1),
+    monotonia = classifica_monotonia(df$tmi),
+    n_alternancias_sinal = as.integer(n_alternancias),
+    prop_anos_reversao = mean(dx_class == 1, na.rm = TRUE),
+    prop_anos_estagnacao = mean(dx_class == 0, na.rm = TRUE),
+    limite_empirico_cauda = mean(tail_df$tmi, na.rm = TRUE),
+    sd_cauda = if (n_tail >= 2) stats::sd(tail_df$tmi, na.rm = TRUE) else NA_real_,
+    amplitude_cauda = tail_range,
+    max_dif_cauda = max_dif_tail,
+    cauchy_empirico = cauchy_empirico,
+    slope_linear = slope_linear,
+    slope_log = slope_log,
+    tail_slope_log = tail_slope_log,
+    taxa_media_log_anual = ifelse(is.na(slope_log), NA_real_, 100 * (exp(slope_log) - 1)),
+    razao_media_cauda = razao_media_cauda,
+    limite_modelo_loglinear = limite_modelo_loglinear,
+    classe_convergencia_empirica = classe_convergencia,
+    comportamento_subsequencias = comportamento_subseq
+  )
+}
+
+diagnostico_sequencias <- base_janelas |>
+  dplyr::group_by(type, unit) |>
+  dplyr::group_split() |>
+  purrr::map_dfr(calc_seq_diag) |>
+  dplyr::left_join(tendencia_geral, by = c("type", "unit")) |>
+  dplyr::arrange(type, unit)
+
+diagnostico_sequencias_regioes <- diagnostico_sequencias |>
+  dplyr::filter(type == "Região BR") |>
+  dplyr::arrange(unit)
+
 cat("\n--- Episódios locais de estagnação/reversão dentro de trajetória geral de queda ---\n")
 print(episodios_locais, n = Inf)
 
@@ -420,6 +625,9 @@ print(estagnacoes_principais, n = Inf)
 
 cat("\n--- Ranking dos anos iniciais mais recorrentes — regiões brasileiras ---\n")
 print(ranking_anos_inicio_regioes, n = Inf)
+
+cat("\n--- Diagnóstico de sequências — grandes regiões brasileiras ---\n")
+print(diagnostico_sequencias_regioes, n = Inf)
 
 # =========================
 # 8) Similaridade (Região BR ~ País LATAM): score composto
@@ -513,6 +721,110 @@ best_region_for_country <- pairs_scored |>
   dplyr::slice_head(n = 1) |>
   dplyr::ungroup() |>
   dplyr::select(country, iso3c, best_region = region, score, diff_level, diff_pct, rmse_z, corr_growth)
+
+
+# =========================
+# 8.1) Comparação assintótica dentro dos clusters de semelhantes
+# =========================
+
+top3_matches_by_region <- top_matches_by_region |>
+  dplyr::group_by(region) |>
+  dplyr::arrange(score, .by_group = TRUE) |>
+  dplyr::slice_head(n = 3) |>
+  dplyr::ungroup()
+
+seq_region <- diagnostico_sequencias |>
+  dplyr::filter(type == "Região BR") |>
+  dplyr::select(
+    region = unit,
+    reg_limite_cauda = limite_empirico_cauda,
+    reg_amplitude_cauda = amplitude_cauda,
+    reg_cauchy_empirico = cauchy_empirico,
+    reg_slope_log_seq = slope_log,
+    reg_tail_slope_log = tail_slope_log,
+    reg_classe_convergencia = classe_convergencia_empirica,
+    reg_limite_modelo_loglinear = limite_modelo_loglinear,
+    reg_comportamento_subseq = comportamento_subsequencias,
+    reg_monotonia = monotonia
+  )
+
+seq_country <- diagnostico_sequencias |>
+  dplyr::filter(type == "País LATAM") |>
+  dplyr::select(
+    country = unit,
+    cty_limite_cauda = limite_empirico_cauda,
+    cty_amplitude_cauda = amplitude_cauda,
+    cty_cauchy_empirico = cauchy_empirico,
+    cty_slope_log_seq = slope_log,
+    cty_tail_slope_log = tail_slope_log,
+    cty_classe_convergencia = classe_convergencia_empirica,
+    cty_limite_modelo_loglinear = limite_modelo_loglinear,
+    cty_comportamento_subseq = comportamento_subsequencias,
+    cty_monotonia = monotonia
+  )
+
+cluster_seq_comparison <- top3_matches_by_region |>
+  dplyr::left_join(seq_region, by = "region") |>
+  dplyr::left_join(seq_country, by = "country") |>
+  dplyr::mutate(
+    diff_limite_cauda = abs(reg_limite_cauda - cty_limite_cauda),
+    diff_amplitude_cauda = abs(reg_amplitude_cauda - cty_amplitude_cauda),
+    diff_slope_log_seq = abs(reg_slope_log_seq - cty_slope_log_seq),
+    mesma_classe_convergencia = reg_classe_convergencia == cty_classe_convergencia,
+    mesmo_limite_modelo_loglinear = reg_limite_modelo_loglinear == cty_limite_modelo_loglinear,
+    mesma_monotonia = reg_monotonia == cty_monotonia
+  ) |>
+  dplyr::arrange(region, score)
+
+epi_region <- episodios_resumo_unidade |>
+  dplyr::filter(type == "Região BR") |>
+  dplyr::select(
+    region = unit,
+    reg_n_janelas_locais = n_janelas_locais,
+    reg_n_reversoes = n_reversoes,
+    reg_n_estagnacoes = n_estagnacoes,
+    reg_maior_delta_reversao = maior_delta_reversao,
+    reg_janela_maior_reversao = janela_maior_reversao,
+    reg_maior_duracao_estagnacao = maior_duracao_estagnacao,
+    reg_janela_maior_estagnacao = janela_maior_estagnacao
+  )
+
+epi_country <- episodios_resumo_unidade |>
+  dplyr::filter(type == "País LATAM") |>
+  dplyr::select(
+    country = unit,
+    cty_n_janelas_locais = n_janelas_locais,
+    cty_n_reversoes = n_reversoes,
+    cty_n_estagnacoes = n_estagnacoes,
+    cty_maior_delta_reversao = maior_delta_reversao,
+    cty_janela_maior_reversao = janela_maior_reversao,
+    cty_maior_duracao_estagnacao = maior_duracao_estagnacao,
+    cty_janela_maior_estagnacao = janela_maior_estagnacao
+  )
+
+cluster_episode_comparison <- top3_matches_by_region |>
+  dplyr::left_join(epi_region, by = "region") |>
+  dplyr::left_join(epi_country, by = "country") |>
+  tidyr::replace_na(list(
+    reg_n_janelas_locais = 0L,
+    reg_n_reversoes = 0L,
+    reg_n_estagnacoes = 0L,
+    cty_n_janelas_locais = 0L,
+    cty_n_reversoes = 0L,
+    cty_n_estagnacoes = 0L
+  )) |>
+  dplyr::mutate(
+    diff_n_reversoes = abs(reg_n_reversoes - cty_n_reversoes),
+    diff_n_estagnacoes = abs(reg_n_estagnacoes - cty_n_estagnacoes),
+    mesmo_padrao_eventos = diff_n_reversoes <= 1 & diff_n_estagnacoes <= 2
+  ) |>
+  dplyr::arrange(region, score)
+
+cat("\n--- Comparação assintótica entre regiões e top 3 países semelhantes ---\n")
+print(cluster_seq_comparison, n = Inf)
+
+cat("\n--- Comparação de episódios locais entre regiões e top 3 países semelhantes ---\n")
+print(cluster_episode_comparison, n = Inf)
 
 # =========================
 # 9) GRÁFICOS (PNG) -> graficos/
@@ -924,6 +1236,108 @@ p_idx <- ggplot2::ggplot() +
 
 save_png(p_idx, file.path(graficos_dir, "fig_indexed_trajectories_regioes_vs_latam.png"), 11, 6.2)
 
+# (9.5b) Episódios locais: principais reversões e estagnações nas regiões
+# Evita plotar todas as janelas possíveis, que deixariam a figura poluída.
+episodios_regioes_plot <- dplyr::bind_rows(
+  reversoes_principais |>
+    dplyr::filter(type == "Região BR") |>
+    dplyr::mutate(grupo_plot = "Reversões principais"),
+  estagnacoes_principais |>
+    dplyr::filter(type == "Região BR") |>
+    dplyr::mutate(grupo_plot = "Estagnações principais")
+) |>
+  dplyr::distinct(type, unit, ano_inicio, ano_fim, classificacao, .keep_all = TRUE) |>
+  dplyr::arrange(unit, classificacao, ano_inicio, ano_fim)
+
+if (nrow(episodios_regioes_plot) > 0) {
+  p_episodios_regioes <- episodios_regioes_plot |>
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = ano_inicio,
+        xend = ano_fim,
+        y = unit,
+        yend = unit,
+        linetype = classificacao,
+        linewidth = duracao_anos
+      )
+    ) +
+    ggplot2::geom_segment(alpha = 0.85) +
+    ggplot2::geom_point(ggplot2::aes(x = ano_inicio), size = 2) +
+    ggplot2::geom_point(ggplot2::aes(x = ano_fim), size = 2) +
+    ggplot2::scale_linewidth_continuous(range = c(0.6, 2.4)) +
+    ggplot2::labs(
+      x = NULL,
+      y = NULL,
+      linetype = NULL,
+      linewidth = "Duração",
+      title = "Episódios locais de estagnação/reversão da TMI — Grandes Regiões",
+      subtitle = "Principais intervalos consecutivos dentro de trajetórias gerais de queda",
+      caption = source_caption
+    ) +
+    theme_tmi()
+  
+  save_png(
+    p_episodios_regioes,
+    file.path(graficos_dir, "fig_episodios_locais_estagnacao_reversao_regioes.png"),
+    width = 11,
+    height = 6.2
+  )
+}
+
+# (9.5c) Diagnóstico assintótico empírico das regiões
+p_seq_regioes <- diagnostico_sequencias_regioes |>
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = stats::reorder(unit, limite_empirico_cauda),
+      y = limite_empirico_cauda,
+      fill = classe_convergencia_empirica
+    )
+  ) +
+  ggplot2::geom_col() +
+  ggplot2::coord_flip() +
+  ggplot2::labs(
+    x = NULL,
+    y = paste0("Limite empírico da cauda (média dos últimos ", tail_n, " anos)"),
+    fill = NULL,
+    title = "Comportamento assintótico empírico da TMI — Grandes Regiões",
+    subtitle = "Diagnóstico baseado na estabilidade da cauda e na inclinação log-linear recente",
+    caption = source_caption
+  ) +
+  theme_tmi()
+
+save_png(
+  p_seq_regioes,
+  file.path(graficos_dir, "fig_diagnostico_assintotico_regioes.png"),
+  width = 11,
+  height = 6.2
+)
+
+# (9.5d) Diferença do limite empírico de cauda entre cada região e seus top 3 países semelhantes
+if (nrow(cluster_seq_comparison) > 0) {
+  p_cluster_limite <- cluster_seq_comparison |>
+    dplyr::mutate(country = stats::reorder(country, diff_limite_cauda)) |>
+    ggplot2::ggplot(ggplot2::aes(x = country, y = diff_limite_cauda)) +
+    ggplot2::geom_col() +
+    ggplot2::coord_flip() +
+    ggplot2::facet_wrap(~ region, scales = "free_y") +
+    ggplot2::labs(
+      x = NULL,
+      y = "|limite empírico da região - limite empírico do país|",
+      title = "Comparação assintótica nos clusters de trajetórias semelhantes",
+      subtitle = "Top 3 países mais semelhantes a cada região, segundo o escore composto",
+      caption = source_caption
+    ) +
+    theme_tmi()
+  
+  save_png(
+    p_cluster_limite,
+    file.path(graficos_dir, "fig_cluster_comparacao_limite_empirico.png"),
+    width = 12,
+    height = 7
+  )
+}
+
+
 # (9.6) Patchwork: 3 em cima, 2 embaixo centralizados (robusto, sem string design)
 
 ordem_regs <- c("Norte", "Nordeste", "Sudeste", "Sul", "Centro-Oeste")
@@ -1201,6 +1615,355 @@ make_choropleths_tmi <- function(
     p_latam_abs_bra_regions,
     file.path(graficos_dir, paste0("choropleth_latam_paises_tmi_", year_sel, "_brasil_regioes.png")),
     width_abs, height_abs
+  )
+  
+  # ---------------------------------------------------------
+  # PATCHWORKS ABSOLUTOS: ano inicial vs ano final
+  # Mantém as mesmas regras dos choropleths flat,
+  # mas coloca start_common e latest_year lado a lado.
+  # ---------------------------------------------------------
+  
+  years_abs_pair <- c(year_base, year_sel)
+  
+  # =========================
+  # A) Brasil por Grandes Regiões: year_base vs year_sel
+  # =========================
+  
+  br_abs_pair_data <- br_regioes_c |>
+    dplyr::filter(year %in% years_abs_pair) |>
+    dplyr::mutate(region_key = normalize_region(unit)) |>
+    dplyr::select(year, region_label = unit, region_key, tmi)
+  
+  br_abs_limits <- range(br_abs_pair_data$tmi, na.rm = TRUE)
+  
+  make_br_abs_panel <- function(ano) {
+    
+    br_reg_y_i <- br_abs_pair_data |>
+      dplyr::filter(year == ano)
+    
+    br_map_i <- br_regions_sf |>
+      dplyr::left_join(br_reg_y_i, by = "region_key")
+    
+    br_lab_i <- br_map_i |>
+      dplyr::mutate(lbl = sprintf("%.1f", tmi))
+    
+    if (label_values) {
+      xy <- sf_label_points(br_lab_i)
+      br_lab_i <- br_lab_i |>
+        dplyr::mutate(x = xy$X, y = xy$Y)
+    }
+    
+    p_i <- ggplot2::ggplot(br_map_i) +
+      ggplot2::geom_sf(
+        ggplot2::aes(fill = tmi),
+        color = "black",
+        linewidth = 0.9
+      ) +
+      scale_fill_magma(
+        limits = br_abs_limits,
+        na.value = "grey85"
+      ) +
+      ggplot2::coord_sf(expand = FALSE, clip = "off") +
+      ggplot2::labs(
+        title = paste0(ano),
+        fill = "TMI"
+      ) +
+      theme_map_tmi_safe() +
+      ggplot2::theme(
+        plot.caption = ggplot2::element_blank()
+      )
+    
+    if (label_values) {
+      p_i <- p_i +
+        ggrepel::geom_label_repel(
+          data = br_lab_i,
+          ggplot2::aes(x = x, y = y, label = lbl),
+          size = 3.0,
+          family = FONT_FAMILY,
+          label.size = 0.2,
+          min.segment.length = 0,
+          box.padding = 0.15,
+          point.padding = 0.05,
+          seed = 123,
+          fill = "white",
+          alpha = 0.95
+        )
+    }
+    
+    p_i
+  }
+  
+  p_br_abs_pair <- make_br_abs_panel(year_base) +
+    make_br_abs_panel(year_sel) +
+    patchwork::plot_layout(guides = "collect") +
+    patchwork::plot_annotation(
+      title = paste0("Brasil — TMI por Grande Região (", year_base, " e ", year_sel, ")"),
+      caption = source_caption,
+      theme = ggplot2::theme(
+        plot.background = ggplot2::element_rect(fill = "grey92", color = NA),
+        text = ggplot2::element_text(family = FONT_FAMILY),
+        plot.title = ggplot2::element_text(size = TITLE_SIZE, family = FONT_FAMILY),
+        plot.caption = ggplot2::element_text(size = CAP_SIZE, family = FONT_FAMILY),
+        legend.position = "bottom"
+      )
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.background = ggplot2::element_rect(fill = "grey92", color = NA)
+    )
+  
+  save_png_map(
+    p_br_abs_pair,
+    file.path(
+      graficos_dir,
+      paste0("choropleth_br_regioes_tmi_", year_base, "_", year_sel, "_patchwork.png")
+    ),
+    width = 16,
+    height = 8.6
+  )
+  
+  # =========================
+  # B) LATAM: Brasil como país — year_base vs year_sel
+  # =========================
+  
+  latam_abs_pair_data <- latam_c |>
+    dplyr::filter(year %in% years_abs_pair) |>
+    dplyr::select(year, iso3c, unit, tmi)
+  
+  latam_abs_limits <- range(latam_abs_pair_data$tmi, na.rm = TRUE)
+  
+  make_latam_abs_bra_panel <- function(ano) {
+    
+    latam_y_i <- latam_abs_pair_data |>
+      dplyr::filter(year == ano) |>
+      dplyr::select(iso3c, unit, tmi)
+    
+    latam_world_i <- world_sf |>
+      dplyr::inner_join(latam_y_i, by = c("iso3" = "iso3c")) |>
+      sf::st_crop(bb)
+    
+    latam_lab_i <- latam_world_i |>
+      dplyr::mutate(lbl = sprintf("%.1f", tmi))
+    
+    if (label_values) {
+      xy <- sf_label_points(latam_lab_i)
+      latam_lab_i <- latam_lab_i |>
+        dplyr::mutate(x = xy$X, y = xy$Y)
+    }
+    
+    p_i <- ggplot2::ggplot(latam_world_i) +
+      ggplot2::geom_sf(
+        ggplot2::aes(fill = tmi),
+        color = "black",
+        linewidth = 0.25
+      ) +
+      scale_fill_magma(
+        limits = latam_abs_limits
+      ) +
+      ggplot2::coord_sf(expand = FALSE, clip = "off") +
+      ggplot2::labs(
+        title = paste0(ano),
+        fill = "TMI"
+      ) +
+      theme_map_tmi_safe() +
+      ggplot2::theme(
+        plot.caption = ggplot2::element_blank()
+      )
+    
+    if (label_values) {
+      p_i <- p_i +
+        ggrepel::geom_label_repel(
+          data = latam_lab_i,
+          ggplot2::aes(x = x, y = y, label = lbl),
+          size = 2.4,
+          family = FONT_FAMILY,
+          label.size = 0.15,
+          min.segment.length = 0,
+          box.padding = 0.12,
+          point.padding = 0.03,
+          seed = 123,
+          fill = "white",
+          alpha = 0.90,
+          max.overlaps = Inf
+        )
+    }
+    
+    p_i
+  }
+  
+  p_latam_abs_bra_pair <- make_latam_abs_bra_panel(year_base) +
+    make_latam_abs_bra_panel(year_sel) +
+    patchwork::plot_layout(guides = "collect") +
+    patchwork::plot_annotation(
+      title = paste0("LATAM — TMI por país (", year_base, " e ", year_sel, ") | Brasil como país"),
+      caption = source_caption,
+      theme = ggplot2::theme(
+        plot.background = ggplot2::element_rect(fill = "grey92", color = NA),
+        text = ggplot2::element_text(family = FONT_FAMILY),
+        plot.title = ggplot2::element_text(size = TITLE_SIZE, family = FONT_FAMILY),
+        plot.caption = ggplot2::element_text(size = CAP_SIZE, family = FONT_FAMILY),
+        legend.position = "bottom"
+      )
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.background = ggplot2::element_rect(fill = "grey92", color = NA)
+    )
+  
+  save_png_map(
+    p_latam_abs_bra_pair,
+    file.path(
+      graficos_dir,
+      paste0("choropleth_latam_paises_tmi_", year_base, "_", year_sel, "_brasil_pais_patchwork.png")
+    ),
+    width = 16,
+    height = 8.6
+  )
+  
+  # =========================
+  # C) LATAM: Brasil por Grandes Regiões — year_base vs year_sel
+  # =========================
+  
+  latam_no_bra_abs_pair_data <- latam_c |>
+    dplyr::filter(year %in% years_abs_pair) |>
+    dplyr::select(year, iso3c, unit, tmi)
+  
+  br_regions_abs_pair_data <- br_regioes_c |>
+    dplyr::filter(year %in% years_abs_pair) |>
+    dplyr::mutate(region_key = normalize_region(unit)) |>
+    dplyr::select(year, region_label = unit, region_key, tmi)
+  
+  latam_bra_regions_abs_limits <- range(
+    c(
+      latam_no_bra_abs_pair_data$tmi,
+      br_regions_abs_pair_data$tmi
+    ),
+    na.rm = TRUE
+  )
+  
+  make_latam_abs_bra_regions_panel <- function(ano) {
+    
+    latam_y_i <- latam_no_bra_abs_pair_data |>
+      dplyr::filter(year == ano) |>
+      dplyr::select(iso3c, unit, tmi)
+    
+    latam_world_i <- world_sf |>
+      dplyr::inner_join(latam_y_i, by = c("iso3" = "iso3c")) |>
+      dplyr::filter(iso3 != "BRA") |>
+      sf::st_crop(bb)
+    
+    latam_lab_i <- latam_world_i |>
+      dplyr::mutate(lbl = sprintf("%.1f", tmi))
+    
+    if (label_values) {
+      xy <- sf_label_points(latam_lab_i)
+      latam_lab_i <- latam_lab_i |>
+        dplyr::mutate(x = xy$X, y = xy$Y)
+    }
+    
+    br_reg_y_i <- br_regions_abs_pair_data |>
+      dplyr::filter(year == ano)
+    
+    br_regions_i <- br_regions_sf |>
+      dplyr::left_join(br_reg_y_i, by = "region_key") |>
+      sf::st_crop(bb)
+    
+    br_lab_i <- br_regions_i |>
+      dplyr::mutate(lbl = sprintf("%.1f", tmi))
+    
+    if (label_values) {
+      xy <- sf_label_points(br_lab_i)
+      br_lab_i <- br_lab_i |>
+        dplyr::mutate(x = xy$X, y = xy$Y)
+    }
+    
+    p_i <- ggplot2::ggplot() +
+      ggplot2::geom_sf(
+        data = latam_world_i,
+        ggplot2::aes(fill = tmi),
+        color = "black",
+        linewidth = 0.25
+      ) +
+      ggplot2::geom_sf(
+        data = br_regions_i,
+        ggplot2::aes(fill = tmi),
+        color = "black",
+        linewidth = 0.70
+      ) +
+      scale_fill_magma(
+        limits = latam_bra_regions_abs_limits
+      ) +
+      ggplot2::coord_sf(expand = FALSE, clip = "off") +
+      ggplot2::labs(
+        title = paste0(ano),
+        fill = "TMI"
+      ) +
+      theme_map_tmi_safe() +
+      ggplot2::theme(
+        plot.caption = ggplot2::element_blank()
+      )
+    
+    if (label_values) {
+      p_i <- p_i +
+        ggrepel::geom_label_repel(
+          data = latam_lab_i,
+          ggplot2::aes(x = x, y = y, label = lbl),
+          size = 2.3,
+          family = FONT_FAMILY,
+          label.size = 0.15,
+          min.segment.length = 0,
+          box.padding = 0.12,
+          point.padding = 0.03,
+          seed = 123,
+          fill = "white",
+          alpha = 0.90,
+          max.overlaps = Inf
+        ) +
+        ggrepel::geom_label_repel(
+          data = br_lab_i,
+          ggplot2::aes(x = x, y = y, label = lbl),
+          size = 2.7,
+          family = FONT_FAMILY,
+          label.size = 0.18,
+          min.segment.length = 0,
+          box.padding = 0.15,
+          point.padding = 0.05,
+          seed = 123,
+          fill = "white",
+          alpha = 0.95
+        )
+    }
+    
+    p_i
+  }
+  
+  p_latam_abs_bra_regions_pair <- make_latam_abs_bra_regions_panel(year_base) +
+    make_latam_abs_bra_regions_panel(year_sel) +
+    patchwork::plot_layout(guides = "collect") +
+    patchwork::plot_annotation(
+      title = paste0("LATAM — TMI (", year_base, " e ", year_sel, ") | Brasil por Grandes Regiões"),
+      caption = source_caption,
+      theme = ggplot2::theme(
+        plot.background = ggplot2::element_rect(fill = "grey92", color = NA),
+        text = ggplot2::element_text(family = FONT_FAMILY),
+        plot.title = ggplot2::element_text(size = TITLE_SIZE, family = FONT_FAMILY),
+        plot.caption = ggplot2::element_text(size = CAP_SIZE, family = FONT_FAMILY),
+        legend.position = "bottom"
+      )
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.background = ggplot2::element_rect(fill = "grey92", color = NA)
+    )
+  
+  save_png_map(
+    p_latam_abs_bra_regions_pair,
+    file.path(
+      graficos_dir,
+      paste0("choropleth_latam_paises_tmi_", year_base, "_", year_sel, "_brasil_regioes_patchwork.png")
+    ),
+    width = 16,
+    height = 8.6
   )
   
   # DELTAS (ABS e %)
@@ -1553,88 +2316,55 @@ make_choropleths_tmi <- function(
 
 make_choropleths_tmi(year_sel = latest_year, year_base = start_common, label_values = TRUE)
 
-p_eventos_regioes <- diagnostico_yoy |>
-  dplyr::filter(type == "Região BR") |>
-  ggplot2::ggplot(ggplot2::aes(x = year, y = tmi, color = unit)) +
-  ggplot2::geom_line(linewidth = 0.9) +
-  ggplot2::geom_point(
-    data = diagnostico_yoy |>
-      dplyr::filter(
-        type == "Região BR",
-        status_yoy %in% c("Estagnação", "Reversão / aumento")
-      ),
-    ggplot2::aes(shape = status_yoy),
-    size = 2.8
-  ) +
-  ggplot2::labs(
-    x = NULL,
-    y = "TMI",
-    color = NULL,
-    shape = NULL,
-    title = "Pontos de estagnação/reversão da TMI — Grandes Regiões",
-    subtitle = "Marcadores indicam anos em que a queda desacelera fortemente ou a TMI aumenta",
-    caption = source_caption
-  ) +
-  theme_tmi()
-
-save_png(
-  p_eventos_regioes,
-  file.path(graficos_dir, "fig_eventos_estagnacao_reversao_regioes.png"),
-  width = 11,
-  height = 6.2
-)
-
 # =========================
-# 11) Exportar tabelas (Excel) -> outputs_tmi/
+# 11) Exportar tabelas (Excel) -> outputs_tmi_final/
 # =========================
 wb <- openxlsx::createWorkbook()
 
-openxlsx::addWorksheet(wb, "BR_regioes_series")
-openxlsx::writeData(wb, "BR_regioes_series", br_regioes_c)
+write_sheet <- function(wb, sheet_name, data) {
+  sheet_name <- substr(sheet_name, 1, 31)
+  openxlsx::addWorksheet(wb, sheet_name)
+  if (is.null(data) || nrow(data) == 0) {
+    openxlsx::writeData(wb, sheet_name, tibble::tibble(mensagem = "Sem registros para os critérios definidos."))
+  } else {
+    openxlsx::writeData(wb, sheet_name, data)
+  }
+}
 
-openxlsx::addWorksheet(wb, "LATAM_series")
-openxlsx::writeData(wb, "LATAM_series", latam_c)
-
-openxlsx::addWorksheet(wb, paste0("Ranking_", latest_year))
-openxlsx::writeData(wb, paste0("Ranking_", latest_year), rank_latest)
-
-openxlsx::addWorksheet(wb, "Gaps_regioes_vs_LATAM")
-openxlsx::writeData(wb, "Gaps_regioes_vs_LATAM", gap_regioes)
-
-openxlsx::addWorksheet(wb, "Wins_regioes_no_ultimo_ano")
-openxlsx::writeData(wb, "Wins_regioes_no_ultimo_ano", wins_regioes)
-
-openxlsx::addWorksheet(wb, paste0("Change_", start_common, "_", latest_year))
-openxlsx::writeData(wb, paste0("Change_", start_common, "_", latest_year), change_long)
-
-openxlsx::addWorksheet(wb, "Similares_por_regiao")
-openxlsx::writeData(wb, "Similares_por_regiao", top_matches_by_region)
-
-openxlsx::addWorksheet(wb, "Melhor_regiao_por_pais")
-openxlsx::writeData(wb, "Melhor_regiao_por_pais", best_region_for_country)
+write_sheet(wb, "Parametros_analise", parametros_analise)
+write_sheet(wb, "BR_regioes_series", br_regioes_c)
+write_sheet(wb, "LATAM_series", latam_c)
+write_sheet(wb, paste0("Ranking_", latest_year), rank_latest)
+write_sheet(wb, "Gaps_regioes_vs_LATAM", gap_regioes)
+write_sheet(wb, "Wins_regioes_ultimo", wins_regioes)
+write_sheet(wb, paste0("Change_", start_common, "_", latest_year), change_long)
 
 if (nrow(change_recent) > 0) {
-  openxlsx::addWorksheet(wb, paste0("Change_2019_", latest_year))
-  openxlsx::writeData(wb, paste0("Change_2019_", latest_year), change_recent)
+  write_sheet(wb, paste0("Change_2019_", latest_year), change_recent)
 }
+
+write_sheet(wb, "Janelas_tmi", janelas_tmi)
+write_sheet(wb, "Episodios_locais", episodios_locais)
+write_sheet(wb, "Episodios_regioes", episodios_regioes)
+write_sheet(wb, "Reversoes_princip", reversoes_principais)
+write_sheet(wb, "Estagnacoes_princip", estagnacoes_principais)
+write_sheet(wb, "Ranking_inicio", ranking_anos_inicio)
+write_sheet(wb, "Ranking_inicio_reg", ranking_anos_inicio_regioes)
+write_sheet(wb, "Episodios_resumo", episodios_resumo_unidade)
+
+write_sheet(wb, "Seq_diag", diagnostico_sequencias)
+write_sheet(wb, "Seq_diag_regioes", diagnostico_sequencias_regioes)
+
+write_sheet(wb, "Similares_por_regiao", top_matches_by_region)
+write_sheet(wb, "Melhor_regiao_por_pais", best_region_for_country)
+write_sheet(wb, "Cluster_seq_comp", cluster_seq_comparison)
+write_sheet(wb, "Cluster_event_comp", cluster_episode_comparison)
 
 openxlsx::saveWorkbook(
   wb,
-  file = file.path(out_dir, "tmi_comparativo.xlsx"),
+  file = file.path(out_dir, "tmi_comparativo_final.xlsx"),
   overwrite = TRUE
 )
-
-openxlsx::addWorksheet(wb, "Eventos_estag_reversao")
-openxlsx::writeData(wb, "Eventos_estag_reversao", eventos_estagnacao_reversao)
-
-openxlsx::addWorksheet(wb, "Periodos_estag_reversao")
-openxlsx::writeData(wb, "Periodos_estag_reversao", eventos_periodos)
-
-openxlsx::addWorksheet(wb, "Pontos_virada")
-openxlsx::writeData(wb, "Pontos_virada", pontos_virada)
-
-openxlsx::addWorksheet(wb, "Resumo_estag_reversao")
-openxlsx::writeData(wb, "Resumo_estag_reversao", resumo_estagnacao_reversao)
 
 # =========================
 # 12) Tabelas no console (RStudio/Positron)
@@ -1717,4 +2447,4 @@ cat("\nOK!\n")
 cat("Excel em:", normalizePath(out_dir, winslash = "/"), "\n")
 cat("Gráficos em:", normalizePath(graficos_dir, winslash = "/"), "\n")
 cat("Janela comum:", start_common, "–", latest_year, "\n")
-cat("Arquivo Excel:", file.path(out_dir, "tmi_comparativo.xlsx"), "\n")
+cat("Arquivo Excel:", file.path(out_dir, "tmi_comparativo_final.xlsx"), "\n")
