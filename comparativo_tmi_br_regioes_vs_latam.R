@@ -17,7 +17,7 @@
 # =========================
 # 0) Caminhos (AJUSTE AQUI)
 # =========================
-main_folder <- "C:/Users/uriel/Documents/UFPB Estatística/ALAP 2026/TMI"
+main_folder <- "SEU/CAMINHO"
 main_folder <- normalizePath(main_folder, winslash = "/", mustWork = FALSE)
 
 brasil_tmi <- file.path(main_folder, "brasil_00_24.xlsx")
