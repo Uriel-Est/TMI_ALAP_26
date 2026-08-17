@@ -1,0 +1,2718 @@
+/*-- scss:defaults --*/
+
+$navy: #102A43;
+$cyan: #1CA7C9;
+$teal: #0F766E;
+$rose: #F6E8E8;
+$orange: #F59E0B;
+$red: #C2410C;
+$gray: #64748B;
+$light-gray: #E2E8F0;
+$very-light: #F8FAFC;
+$white: #FFFFFF;
+
+/*-- scss:rules --*/
+
+/* ============================================================
+   TMI LATAM / ALAP — custom.scss limpo
+   Quarto reveal.js dashboard style
+   ============================================================ */
+
+.reveal {
+  background: $rose;
+  color: $navy;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.reveal .slides { text-align: left; }
+.reveal .slides section { height: 100%; box-sizing: border-box; }
+
+.reveal section.slide {
+  padding: 34px 66px 36px 126px !important;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  color: $navy;
+  font-family: "Segoe UI", Arial, sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.reveal h2 {
+  font-size: 1em;
+  line-height: 1.05;
+  margin: 0 0 0.55rem 0;
+  font-weight: 850;
+}
+
+.reveal p,
+.reveal li { color: $navy; }
+.reveal a { color: $cyan; }
+.reveal strong { color: $navy; }
+
+.reveal img.dash-plot-img,
+.reveal img.map-plot-img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 96% !important;
+  max-height: 96% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: auto !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* ============================================================
+   Capa
+   ============================================================ */
+
+.reveal section.title-slide {
+  padding: 64px 88px 56px 142px !important;
+  background: $rose;
+}
+
+.reveal .title-slide h2 { display: none; }
+
+.cover-slide {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1.42fr 0.62fr;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+.cover-main { max-width: 1040px; }
+
+.cover-kicker {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.22rem 0.62rem;
+  border-radius: 999px;
+  background: rgba(28, 167, 201, 0.14);
+  color: $teal;
+  font-size: 0.40em;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.90rem;
+}
+
+.cover-title {
+  font-size: 1.44em;
+  line-height: 0.99;
+  font-weight: 900;
+  color: $navy;
+  letter-spacing: -0.055em;
+  max-width: 1030px;
+}
+
+.cover-authors {
+  margin-top: 1.00rem;
+  font-size: 0.48em;
+  line-height: 1.28;
+  color: $navy;
+  font-weight: 750;
+  max-width: 980px;
+}
+
+.cover-affiliations {
+  margin-top: 0.48rem;
+  font-size: 0.34em;
+  color: $gray;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.cover-date {
+  margin-top: 1.00rem;
+  font-size: 0.34em;
+  color: $gray;
+  font-weight: 700;
+}
+
+.cover-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cover-logo-box {
+  width: 300px;
+  height: 300px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.cover-logo-box img {
+  max-width: 100%;
+  max-height: 210px;
+  object-fit: contain;
+}
+
+.cover-side-note {
+  font-size: 0.32em;
+  color: $gray;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+/* ============================================================
+   Navegação lateral
+   ============================================================ */
+
+.alap-side-nav {
+  position: fixed;
+  left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.alap-side-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+  text-decoration: none;
+  color: rgba(16, 42, 67, 0.45);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.alap-side-nav .nav-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 42, 67, 0.32);
+  background: transparent;
+}
+
+.alap-side-nav .nav-label {
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.alap-side-nav:hover .nav-label,
+.alap-side-nav a.active .nav-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.alap-side-nav a.active { color: $navy; }
+.alap-side-nav a.active .nav-dot { background: $navy; border-color: $navy; }
+
+/* ============================================================
+   Elementos gerais
+   ============================================================ */
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 0.16rem;
+  padding: 0.12rem 0.40rem;
+  border-radius: 999px;
+  background: rgba(28, 167, 201, 0.12);
+  color: $teal;
+  font-size: 0.34em;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.metric-label {
+  color: $gray;
+  font-size: 0.32em;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 900;
+}
+
+.metric-value {
+  margin-top: 0.18rem;
+  color: $navy;
+  font-size: 0.72em;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.metric-note {
+  margin-top: 0.24rem;
+  color: $gray;
+  font-size: 0.34em;
+  line-height: 1.20;
+}
+
+.footer-note {
+  position: absolute;
+  left: 126px;
+  bottom: 18px;
+  font-size: 0.30em;
+  color: $gray;
+}
+
+/* ============================================================
+   Motivação / Dados
+   ============================================================ */
+
+.big-claim {
+  font-size: 0.98em;
+  line-height: 1.12;
+  font-weight: 850;
+  max-width: 980px;
+  margin: 0.35rem 0 1.05rem 0;
+  color: $navy;
+  letter-spacing: -0.04em;
+}
+
+.big-claim.compact {
+  font-size: 0.90em;
+  max-width: 780px;
+  margin-bottom: 0.7rem;
+}
+
+.motivation-grid,
+.data-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  gap: 0.85rem;
+  align-items: stretch;
+  margin-top: 0.45rem;
+}
+
+.motivation-main,
+.data-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.motivation-text,
+.data-text {
+  font-size: 0.46em;
+  line-height: 1.34;
+  color: $gray;
+  max-width: 800px;
+}
+
+.motivation-cards,
+.data-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.60rem;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.78rem;
+}
+
+.score-composition-card {
+  margin-top: 0.82rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 22px;
+  padding: 0.78rem;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.62rem;
+}
+
+.score-title {
+  color: $navy;
+  font-weight: 850;
+  font-size: 0.62em;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.score-badge {
+  background: rgba(28, 167, 201, 0.14);
+  color: $teal;
+  border-radius: 999px;
+  padding: 0.24rem 0.54rem;
+  font-size: 0.34em;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.score-components {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.45rem;
+}
+
+.score-component {
+  background: rgba(28, 167, 201, 0.08);
+  border: 1px solid rgba(28, 167, 201, 0.16);
+  border-radius: 16px;
+  padding: 0.52rem;
+  min-height: 98px;
+}
+
+.score-component span {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+  background: $navy;
+  color: $white;
+  font-size: 0.30em;
+  font-weight: 900;
+  margin-bottom: 0.32rem;
+}
+
+.score-component strong {
+  display: block;
+  font-size: 0.45em;
+  color: $navy;
+  font-weight: 900;
+  margin-bottom: 0.12rem;
+}
+
+.score-component small {
+  display: block;
+  font-size: 0.30em;
+  line-height: 1.14;
+  color: $gray;
+}
+
+/* ============================================================
+   Dashboard base
+   ============================================================ */
+
+.dashboard-slide h2 { display: none; }
+.dashboard-slide { height: 100%; }
+
+.dash-result {
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+  overflow: hidden;
+}
+
+.dash-top-row {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.0rem;
+  margin-bottom: 0;
+}
+
+.dash-title {
+  font-size: 0.74em;
+  line-height: 1.02;
+  font-weight: 850;
+  color: $navy;
+  letter-spacing: -0.035em;
+  max-width: 1000px;
+}
+
+.dash-subtitle {
+  margin-top: 0.14rem;
+  font-size: 0.33em;
+  line-height: 1.12;
+  color: $gray;
+  max-width: 900px;
+}
+
+.map-panel,
+.full-plot-panel,
+.main-plot-panel,
+.small-plot-panel,
+.score-heatmap-panel,
+.reversal-map-panel,
+.reversal-ranking-panel,
+.map-main-panel {
+  min-height: 0 !important;
+  height: 100% !important;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.full-plot-panel,
+.map-panel,
+.map-main-panel {
+  flex: 1 1 auto;
+}
+
+.full-plot-panel,
+.main-plot-panel,
+.score-heatmap-panel,
+.reversal-ranking-panel {
+  padding: 0.28rem;
+}
+
+.map-panel,
+.map-main-panel,
+.reversal-map-panel {
+  padding: 0.12rem;
+}
+
+.full-plot-panel.tall-fit { padding: 0.34rem !important; }
+
+/* ============================================================
+   Abas visuais e régua de ano
+   ============================================================ */
+
+.region-tabs-horizontal,
+.year-tabs {
+  display: flex;
+  gap: 0.38rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.region-pill,
+.year-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.32rem 0.54rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  color: $navy;
+  font-size: 0.33em;
+  font-weight: 850;
+}
+
+.region-pill.active,
+.year-tab.active {
+  background: $navy;
+  color: $white;
+}
+
+.year-rail-box {
+  width: 390px;
+  padding-top: 0.10rem;
+}
+
+.year-rail {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.36rem;
+}
+
+.year-rail::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 50%;
+  border-top: 2px dashed rgba(16, 42, 67, 0.24);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.year-tick {
+  position: relative;
+  z-index: 1;
+  width: 62px;
+  height: 30px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.16);
+  color: $navy;
+  font-size: 0.32em;
+  font-weight: 900;
+}
+
+.year-tick.active {
+  background: $navy;
+  color: $white;
+}
+
+.year-rail-caption {
+  text-align: center;
+  font-size: 0.26em;
+  color: $gray;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ============================================================
+   Queda: valores + mapa
+   ============================================================ */
+
+.map-left-insight-layout {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 0.54fr 1.46fr;
+  gap: 0.60rem;
+  align-items: stretch;
+}
+
+.values-side-card {
+  min-height: 0;
+  overflow: hidden;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.66rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.value-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.38rem;
+  align-items: center;
+  padding: 0.32rem 0.42rem;
+  border-radius: 12px;
+  background: rgba(16, 42, 67, 0.04);
+  border: 1px solid rgba(16, 42, 67, 0.08);
+}
+
+.value-row span {
+  font-size: 0.32em;
+  color: $gray;
+  font-weight: 850;
+}
+
+.value-row strong {
+  font-size: 0.44em;
+  color: $navy;
+  font-weight: 950;
+}
+
+.value-row.highlight {
+  background: rgba(194, 65, 12, 0.08);
+  border-color: rgba(194, 65, 12, 0.18);
+}
+
+.value-row.highlight span,
+.value-row.highlight strong { color: $red; }
+
+.values-note {
+  margin-top: 0.14rem;
+  font-size: 0.28em;
+  line-height: 1.16;
+  color: $gray;
+}
+
+/* ============================================================
+   Similaridade
+   ============================================================ */
+
+.similarity-main-layout {
+  flex: 1 1 0;
+  min-height: 0 !important;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.50fr 0.80fr;
+  gap: 0.58rem;
+  align-items: stretch;
+}
+
+.similarity-side-panel {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 1fr 0.82fr;
+  gap: 0.44rem;
+}
+
+.native-summary-card {
+  min-height: 0;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.86rem;
+  overflow: hidden;
+}
+
+.native-region-name {
+  margin-top: 0.10rem;
+  font-size: 1.38em;
+  line-height: 1;
+  font-weight: 900;
+  color: $navy;
+  letter-spacing: -0.045em;
+}
+
+.native-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.32rem;
+  margin-top: 0.58rem;
+}
+
+.native-metrics-grid div {
+  border-radius: 12px;
+  background: rgba(28, 167, 201, 0.09);
+  border: 1px solid rgba(28, 167, 201, 0.12);
+  padding: 0.42rem 0.34rem;
+}
+
+.native-metrics-grid span {
+  display: block;
+  font-size: 0.26em;
+  line-height: 1;
+  color: $gray;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 850;
+}
+
+.native-metrics-grid strong {
+  display: block;
+  margin-top: 0.13rem;
+  font-size: 0.52em;
+  line-height: 1;
+  color: $navy;
+  font-weight: 900;
+}
+
+.native-match-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.26rem;
+  margin-top: 0.54rem;
+}
+
+.native-match-list span {
+  display: block;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.10);
+  color: $teal;
+  font-size: 0.32em;
+  font-weight: 850;
+  padding: 0.25rem 0.44rem;
+}
+
+.small-plot-panel { padding: 0.18rem !important; }
+
+/* ============================================================
+   Score / heatmap
+   ============================================================ */
+
+.score-slide-layout {
+  flex: 1 1 0;
+  min-height: 0 !important;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 0.36fr 1.84fr;
+  gap: 0.50rem;
+  align-items: stretch;
+}
+
+.score-explain-card {
+  min-height: 0;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.56rem;
+  overflow: hidden;
+}
+
+.score-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  margin-top: 0.46rem;
+}
+
+.score-mini-list div {
+  padding: 0.28rem 0.36rem;
+  border-radius: 12px;
+  background: rgba(28, 167, 201, 0.08);
+  border: 1px solid rgba(28, 167, 201, 0.13);
+}
+
+.score-mini-list strong {
+  display: block;
+  font-size: 0.31em;
+  color: $navy;
+  font-weight: 900;
+  margin-bottom: 0.05rem;
+}
+
+.score-mini-list span {
+  display: block;
+  font-size: 0.25em;
+  color: $gray;
+  line-height: 1.10;
+}
+
+.score-note {
+  margin-top: 0.52rem;
+  font-size: 0.28em;
+  line-height: 1.16;
+  color: $gray;
+}
+
+.score-heatmap-panel {
+  padding: 0.16rem 0.38rem 0.70rem 0.38rem !important;
+}
+
+/* ============================================================
+   Estagnação
+   ============================================================ */
+
+.stagnation-layout {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.36fr 0.64fr;
+  gap: 0.58rem;
+  align-items: stretch;
+}
+
+.stagnation-side-card {
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.66rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.insight-bullet {
+  padding: 0.44rem 0.50rem;
+  border-radius: 14px;
+  background: rgba(28, 167, 201, 0.07);
+  border: 1px solid rgba(28, 167, 201, 0.12);
+}
+
+.insight-bullet strong {
+  display: block;
+  font-size: 0.34em;
+  color: $navy;
+  font-weight: 900;
+  margin-bottom: 0.07rem;
+}
+
+.insight-bullet span {
+  display: block;
+  font-size: 0.28em;
+  line-height: 1.15;
+  color: $gray;
+}
+
+/* ============================================================
+   Reversão
+   ============================================================ */
+
+.reversal-layout-compact {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 0.82fr 1.18fr;
+  gap: 0.58rem;
+  align-items: stretch;
+}
+
+.reversal-side-stack {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 0.92fr 1.08fr;
+  gap: 0.46rem;
+}
+
+.reversal-insight-card {
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.62rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  overflow: hidden;
+}
+
+.compact-map { padding: 0.16rem !important; }
+
+/* ============================================================
+   Síntese
+   ============================================================ */
+
+.takeaway-grid {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.70rem;
+  margin-top: 0.25rem;
+}
+
+.takeaway-card {
+  min-height: 0;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.82rem;
+}
+
+.takeaway-number {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: $navy;
+  color: $white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.48em;
+  font-weight: 900;
+  margin-bottom: 0.48rem;
+}
+
+.takeaway-title {
+  font-size: 0.48em;
+  line-height: 1.08;
+  font-weight: 900;
+  color: $navy;
+  margin-bottom: 0.28rem;
+}
+
+.takeaway-text {
+  font-size: 0.34em;
+  line-height: 1.22;
+  color: $gray;
+}
+
+.closing-panel {
+  margin-top: 0.70rem;
+  background: rgba(16, 42, 67, 0.05);
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.82rem 0.95rem;
+}
+
+.closing-kicker {
+  font-size: 0.30em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+  color: $teal;
+  margin-bottom: 0.16rem;
+}
+
+.closing-main {
+  font-size: 0.48em;
+  line-height: 1.18;
+  color: $navy;
+  font-weight: 850;
+}
+
+/* ============================================================
+   Referências
+   ============================================================ */
+
+.refs-title {
+  margin-top: 0.30rem;
+  font-size: 0.82em;
+  line-height: 1.05;
+  font-weight: 900;
+  color: $navy;
+  letter-spacing: -0.035em;
+  max-width: 1100px;
+}
+
+.refs-grid-expanded {
+  margin-top: 0.95rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  font-size: 0.50em;
+  line-height: 1.22;
+}
+
+.refs-grid-expanded ul {
+  margin: 0;
+  padding-left: 1.05rem;
+}
+
+.refs-grid-expanded li {
+  margin-bottom: 0.46rem;
+  color: $navy;
+}
+
+.refs-grid-expanded em {
+  color: $navy;
+  font-style: italic;
+}
+
+.refs-grid-expanded li::marker { color: $cyan; }
+
+/* ============================================================
+   LAYOUT V4 — título ancorado no topo; conteúdo no centro visual
+   + ajustes finais de resultados
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Slides textuais
+   O h2 continua no canto superior esquerdo.
+   Só o corpo é centralizado verticalmente no restante do slide.
+   ------------------------------------------------------------ */
+
+.reveal section.text-slide {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: stretch;
+  height: 100%;
+  overflow: hidden;
+}
+
+.reveal section.text-slide > h2 {
+  grid-row: 1;
+  align-self: start;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.reveal section.text-slide > .slide-mid-content {
+  grid-row: 2;
+  align-self: center;
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* posicionamento fino do epicentro visual */
+#motivacao .slide-mid-content,
+#dados .slide-mid-content {
+  transform: translateY(-10px);
+}
+
+#sintese .slide-mid-content {
+  transform: translateY(-6px);
+}
+
+#referencias .slide-mid-content {
+  transform: translateY(-4px);
+}
+
+/* blocos textuais ganham presença no miolo do slide */
+.text-slide .section-tag {
+  margin-bottom: 0.34rem;
+}
+
+.text-slide-lead {
+  color: $navy;
+  font-size: 0.78em;
+  line-height: 1.04;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  max-width: 1040px;
+}
+
+.text-slide-subtitle {
+  margin-top: 0.22rem;
+  color: $gray;
+  font-size: 0.36em;
+  line-height: 1.18;
+}
+
+/* Motivação e dados: o grid inteiro fica no epicentro, não no topo */
+#motivacao .motivation-grid,
+#dados .data-grid {
+  margin-top: 0.24rem;
+  align-items: center;
+}
+
+#motivacao .score-composition-card {
+  margin-top: 0.68rem;
+}
+
+/* Síntese: mantém título no topo e concentra a mensagem no meio */
+#sintese .takeaway-grid {
+  margin-top: 0.64rem;
+}
+
+#sintese .takeaway-card {
+  padding: 0.88rem;
+}
+
+#sintese .closing-panel {
+  margin-top: 0.72rem;
+}
+
+/* Referências: usa bem o centro e mantém fonte confortável */
+#referencias .refs-title {
+  margin-top: 0.20rem;
+  font-size: 0.78em;
+}
+
+#referencias .refs-grid-expanded {
+  margin-top: 0.76rem;
+  font-size: 0.49em;
+  line-height: 1.20;
+  gap: 1.55rem;
+}
+
+#referencias .refs-grid-expanded li {
+  margin-bottom: 0.38rem;
+}
+
+/* ------------------------------------------------------------
+   Trajetórias: dá folga inferior para a legenda não ser comida.
+   ------------------------------------------------------------ */
+
+#queda-series .full-plot-panel {
+  padding: 0.12rem 0.22rem 0.48rem 0.22rem !important;
+}
+
+#queda-series img.dash-plot-img {
+  max-width: 97% !important;
+  max-height: 91% !important;
+}
+
+/* ------------------------------------------------------------
+   Similaridade: menos vazio no resumo, mais altura para o ranking.
+   ------------------------------------------------------------ */
+
+#similaridade .similarity-main-layout {
+  grid-template-columns: 1.52fr 0.78fr !important;
+  gap: 0.56rem !important;
+}
+
+#similaridade .similarity-side-panel {
+  grid-template-rows: 0.36fr 0.64fr !important;
+  gap: 0.42rem !important;
+}
+
+#similaridade .native-summary-card {
+  padding: 0.62rem !important;
+}
+
+#similaridade .native-region-name {
+  font-size: 1.08em !important;
+  margin-top: 0.03rem !important;
+}
+
+#similaridade .native-metrics-grid {
+  margin-top: 0.32rem !important;
+  gap: 0.24rem !important;
+}
+
+#similaridade .native-metrics-grid div {
+  padding: 0.28rem 0.30rem !important;
+}
+
+#similaridade .native-metrics-grid span {
+  font-size: 0.23em !important;
+}
+
+#similaridade .native-metrics-grid strong {
+  font-size: 0.42em !important;
+}
+
+#similaridade .native-match-list {
+  margin-top: 0.30rem !important;
+  gap: 0.16rem !important;
+}
+
+#similaridade .native-match-list span {
+  font-size: 0.28em !important;
+  padding: 0.18rem 0.36rem !important;
+}
+
+#similaridade .small-plot-panel {
+  padding: 0.10rem !important;
+}
+
+#similaridade .small-plot-panel img.dash-plot-img {
+  max-width: 99% !important;
+  max-height: 99% !important;
+}
+
+/* evita Sul quebrando sozinho para uma segunda linha */
+#similaridade .region-tabs-horizontal {
+  flex-wrap: nowrap !important;
+  gap: 0.30rem !important;
+}
+
+#similaridade .region-pill {
+  padding: 0.27rem 0.43rem !important;
+  font-size: 0.29em !important;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------
+   Interrupções da queda: gráfico acima + três mensagens abaixo.
+   ------------------------------------------------------------ */
+
+.stagnation-layout-v2 {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.46rem;
+}
+
+.stagnation-layout-v2 .full-plot-panel {
+  min-height: 0 !important;
+  padding: 0.18rem !important;
+}
+
+.stagnation-layout-v2 img.dash-plot-img {
+  max-width: 98% !important;
+  max-height: 97% !important;
+}
+
+.stagnation-insight-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.48rem;
+}
+
+.stagnation-insight-card {
+  min-height: 88px;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 15px;
+  padding: 0.50rem 0.58rem;
+}
+
+.stagnation-insight-card strong {
+  display: block;
+  color: $navy;
+  font-size: 0.34em;
+  line-height: 1.08;
+  font-weight: 900;
+  margin-bottom: 0.08rem;
+}
+
+.stagnation-insight-card span {
+  display: block;
+  color: $gray;
+  font-size: 0.27em;
+  line-height: 1.14;
+}
+
+/* ------------------------------------------------------------
+   Reversão: mapa volta a ser legível; ranking e tópicos à direita.
+   ------------------------------------------------------------ */
+
+.reversal-layout-readable {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.16fr 0.84fr;
+  gap: 0.56rem;
+  align-items: stretch;
+}
+
+.reversal-layout-readable .readable-map {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 0.08rem !important;
+}
+
+.reversal-layout-readable .readable-map img.map-plot-img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+}
+
+.reversal-readable-side {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 0.62fr 0.38fr;
+  gap: 0.42rem;
+}
+
+.reversal-readable-side .reversal-ranking-panel {
+  min-height: 0 !important;
+  padding: 0.12rem !important;
+}
+
+.reversal-readable-side .reversal-ranking-panel img.dash-plot-img {
+  max-width: 99% !important;
+  max-height: 99% !important;
+}
+
+.reversal-readable-side .reversal-insight-card {
+  min-height: 0 !important;
+  padding: 0.48rem !important;
+  gap: 0.22rem !important;
+}
+
+.reversal-readable-side .insight-bullet {
+  padding: 0.30rem 0.38rem !important;
+}
+
+.reversal-readable-side .insight-bullet strong {
+  font-size: 0.29em !important;
+}
+
+.reversal-readable-side .insight-bullet span {
+  font-size: 0.245em !important;
+  line-height: 1.10 !important;
+}
+
+
+
+/* ============================================================
+   V6 REAL — estagnação e reversão sem reaproveitar painéis antigos
+   ============================================================ */
+
+/* Base dos dois slides */
+#estagnacao .estag-v6,
+#reversao .rev-v6 {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.44rem;
+  overflow: hidden;
+}
+
+#estagnacao .estag-v6 .dash-top-row,
+#reversao .rev-v6 .dash-top-row {
+  flex: 0 0 auto;
+}
+
+/* ---------- Estagnação: faixa compacta + gráfico grande ---------- */
+
+#estagnacao .estag-v6-body {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 88px minmax(0, 1fr);
+  gap: 0.48rem;
+  overflow: hidden;
+}
+
+#estagnacao .estag-v6-strip {
+  height: 88px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.56rem;
+}
+
+#estagnacao .estag-v6-card {
+  min-height: 0;
+  border-radius: 16px;
+  background: #FFFFFF;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  padding: 0.46rem 0.62rem;
+  overflow: hidden;
+}
+
+#estagnacao .estag-v6-card span {
+  display: block;
+  font-size: 0.27em;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #0F766E;
+  font-weight: 900;
+  margin-bottom: 0.08rem;
+}
+
+#estagnacao .estag-v6-card strong {
+  display: block;
+  font-size: 0.48em;
+  line-height: 1.02;
+  color: #102A43;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+#estagnacao .estag-v6-card small {
+  display: block;
+  margin-top: 0.10rem;
+  font-size: 0.27em;
+  line-height: 1.05;
+  color: #64748B;
+  font-weight: 750;
+}
+
+#estagnacao .estag-v6-plot {
+  min-height: 0;
+  background: #FFFFFF;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.28rem;
+}
+
+#estagnacao .estag-v6-plot img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* ---------- Reversão: mapa + legenda HTML garantida ---------- */
+
+#reversao .rev-v6-grid {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
+  gap: 0.58rem;
+  overflow: hidden;
+}
+
+#reversao .rev-v6-map-card,
+#reversao .rev-v6-rank,
+#reversao .rev-v6-brief {
+  background: #FFFFFF;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+}
+
+#reversao .rev-v6-map-card {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 58px;
+  gap: 0.08rem;
+  overflow: hidden;
+  padding: 0.18rem 0.18rem 0.12rem 0.18rem;
+}
+
+#reversao .rev-v6-map-image {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#reversao .rev-v6-map-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+#reversao .rev-v6-legend {
+  align-self: center;
+  justify-self: center;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.11rem;
+}
+
+#reversao .rev-v6-legend-title {
+  font-size: 0.25em;
+  line-height: 1;
+  color: #102A43;
+  font-weight: 900;
+}
+
+#reversao .rev-v6-legend-bar {
+  width: 230px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #313695 0%, #F8FAFC 50%, #D73027 100%);
+  border: 1px solid rgba(16, 42, 67, 0.18);
+}
+
+#reversao .rev-v6-legend-ticks {
+  width: 235px;
+  display: flex;
+  justify-content: space-between;
+  color: #64748B;
+  font-size: 0.20em;
+  line-height: 1;
+  font-weight: 850;
+}
+
+#reversao .rev-v6-side {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 0.64fr) minmax(0, 0.36fr);
+  gap: 0.44rem;
+  overflow: hidden;
+}
+
+#reversao .rev-v6-rank {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0.14rem;
+}
+
+#reversao .rev-v6-rank img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+#reversao .rev-v6-brief {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.44rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.26rem;
+}
+
+#reversao .rev-v6-brief-item {
+  min-height: 0;
+  border-radius: 13px;
+  background: rgba(28, 167, 201, 0.075);
+  border: 1px solid rgba(28, 167, 201, 0.13);
+  padding: 0.30rem 0.38rem;
+  overflow: hidden;
+}
+
+#reversao .rev-v6-brief-item strong {
+  display: block;
+  font-size: 0.28em;
+  line-height: 1.02;
+  color: #102A43;
+  font-weight: 900;
+  margin-bottom: 0.05rem;
+}
+
+#reversao .rev-v6-brief-item span {
+  display: block;
+  font-size: 0.225em;
+  line-height: 1.06;
+  color: #64748B;
+}
+
+/* ============================================================
+   PATCH V6.1 — corrige enquadramento de ESTAGNAÇÃO e REVERSÃO
+   cola no FINAL do custom.scss
+   ============================================================ */
+
+/* ---------- ESTAGNAÇÃO ---------- */
+
+#estagnacao .estag-v6-body {
+  grid-template-rows: 78px minmax(0, 1fr) !important;
+  gap: 0.34rem !important;
+}
+
+#estagnacao .estag-v6-strip {
+  height: 78px !important;
+  gap: 0.42rem !important;
+}
+
+#estagnacao .estag-v6-card {
+  padding: 0.34rem 0.52rem !important;
+}
+
+#estagnacao .estag-v6-card span {
+  font-size: 0.24em !important;
+}
+
+#estagnacao .estag-v6-card strong {
+  font-size: 0.40em !important;
+}
+
+#estagnacao .estag-v6-card small {
+  font-size: 0.24em !important;
+}
+
+#estagnacao .estag-v6-plot {
+  padding: 0.55rem 0.75rem 1.00rem 0.75rem !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#estagnacao .estag-v6-plot img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 88% !important;
+  max-height: 88% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+
+/* ============================================================
+   REVERSÃO RECENTE — não cortar legenda do choropleth
+   classes reais: rev-v6
+   ============================================================ */
+
+#reversao .rev-v6-grid {
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr) !important;
+  gap: 0.46rem !important;
+}
+
+#reversao .rev-v6-map-card {
+  min-height: 0 !important;
+  height: 100% !important;
+  display: grid !important;
+
+  /* aumenta a linha da legenda HTML */
+  grid-template-rows: minmax(0, 1fr) 68px !important;
+
+  padding: 0.12rem 0.12rem 0.12rem 0.12rem !important;
+  overflow: hidden !important;
+}
+
+#reversao .rev-v6-map-image {
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  /* respiro interno para o PNG não comer a própria legenda */
+  padding: 0.16rem 0.08rem 0.12rem 0.08rem !important;
+}
+
+#reversao .rev-v6-map-image img {
+  width: auto !important;
+  height: auto !important;
+
+  /* reduz um tiquinho o PNG inteiro */
+  max-width: 88% !important;
+  max-height: 88% !important;
+
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* legenda HTML abaixo do mapa */
+#reversao .rev-v6-legend {
+  height: 68px !important;
+  min-height: 68px !important;
+  width: 250px !important;
+  align-self: center !important;
+  justify-self: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.08rem !important;
+  overflow: visible !important;
+}
+
+#reversao .rev-v6-legend-title {
+  font-size: 0.24em !important;
+  line-height: 1 !important;
+}
+
+#reversao .rev-v6-legend-bar {
+  width: 220px !important;
+  height: 10px !important;
+}
+
+#reversao .rev-v6-legend-ticks {
+  width: 224px !important;
+  font-size: 0.19em !important;
+  line-height: 1 !important;
+}
+
+/* ============================================================
+   AJUSTE FINAL — timeline menor de verdade
+   ============================================================ */
+
+#estagnacao .estag-v6-plot {
+  padding: 0.55rem 0.95rem 0.90rem 0.95rem !important;
+}
+
+#estagnacao .estag-v6-plot img {
+  width: auto !important;
+  height: auto !important;
+
+  /* aqui é o ponto: reduzir largura também */
+  max-width: 88% !important;
+  max-height: 88% !important;
+
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   ESTAGNAÇÃO — legenda HTML fora do PNG
+   ============================================================ */
+
+#estagnacao .estag-v6-plot {
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) 34px !important;
+  gap: 0.10rem !important;
+  padding: 0.34rem 0.70rem 0.22rem 0.70rem !important;
+  overflow: hidden !important;
+}
+
+#estagnacao .estag-plot-image-wrap {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#estagnacao .estag-plot-image-wrap img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 90% !important;
+  max-height: 92% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#estagnacao .estag-html-legend {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.70rem;
+  color: #64748B;
+  font-size: 0.26em;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+#estagnacao .estag-html-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.16rem;
+}
+
+#estagnacao .legend-circle {
+  color: #E69F00;
+  font-size: 1.20em;
+  line-height: 1;
+}
+
+#estagnacao .legend-triangle {
+  color: #D55E00;
+  font-size: 1.24em;
+  line-height: 1;
+}
+
+#estagnacao .legend-note {
+  color: #64748B;
+  font-weight: 700;
+}
+
+/* ============================================================
+   ESTAGNAÇÃO — microfix Centro-Oeste cortado
+   ============================================================ */
+
+#estagnacao .estag-v6-plot {
+  grid-template-rows: minmax(0, 1fr) 34px !important;
+  padding: 0.42rem 0.90rem 0.24rem 0.90rem !important;
+  overflow: hidden !important;
+}
+
+#estagnacao .estag-plot-image-wrap {
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#estagnacao .estag-plot-image-wrap img {
+  width: 84% !important;
+  height: auto !important;
+  max-width: 84% !important;
+  max-height: 86% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   INTERATIVIDADE — abas locais dos slides
+   ============================================================ */
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+button.tab-button {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+button.tab-button:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.35);
+  outline-offset: 3px;
+}
+
+/* ---------- Queda interativa ---------- */
+
+#queda .queda-interactive {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.48rem;
+  overflow: hidden;
+}
+
+#queda .interactive-year-box {
+  min-width: 390px;
+}
+
+#queda .year-rail button.year-tick {
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 999px;
+  padding: 0.18rem 0.44rem;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+#queda .year-rail button.year-tick.active {
+  background: #0F766E;
+  color: #FFFFFF;
+}
+
+#queda .queda-tabs-shell {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#queda .queda-tab-panel {
+  height: 100%;
+  min-height: 0;
+}
+
+#queda .queda-interactive-panel {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 0.38fr 1.62fr;
+  gap: 0.58rem;
+  overflow: hidden;
+}
+
+#queda .queda-year-card {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#queda .main-map-panel {
+  height: 100%;
+  min-height: 0;
+  background: #FFFFFF;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.18rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#queda .main-map-panel img.dash-map-img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 98% !important;
+  max-height: 96% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   QUEDA INTERATIVA — correção do seletor de anos
+   ============================================================ */
+
+#queda .interactive-year-box {
+  width: 360px !important;
+  min-width: 360px !important;
+  max-width: 360px !important;
+  padding: 0 !important;
+}
+
+#queda .interactive-year-box .year-rail {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.22rem !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+#queda .interactive-year-box .year-rail button.year-tick {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+
+  background: transparent !important;
+  color: #102A43 !important;
+
+  font-family: inherit !important;
+  font-size: 24px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#queda .interactive-year-box .year-rail button.year-tick.active {
+  background: #0F766E !important;
+  color: #FFFFFF !important;
+}
+
+#queda .interactive-year-box .year-rail-caption {
+  margin-top: 0.10rem !important;
+  text-align: right !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  color: #64748B !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+}
+
+/* ============================================================
+   BOTÕES COMPACTOS — bruta / relativa
+   ============================================================ */
+
+.compact-mode-box {
+  width: 235px !important;
+  min-width: 235px !important;
+  max-width: 235px !important;
+}
+
+.compact-mode-box .year-rail {
+  gap: 0.22rem !important;
+}
+
+.compact-mode-box .year-rail button.year-tick {
+  width: 92px !important;
+  min-width: 92px !important;
+  max-width: 92px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  font-size: 18px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+}
+
+#queda-acumulada .queda-acumulada-slide {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.48rem;
+  overflow: hidden;
+}
+
+#queda-acumulada .queda-tabs-shell,
+#reversao .reversao-tabs-shell {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#queda-acumulada .tab-panel,
+#reversao .tab-panel {
+  height: 100%;
+  min-height: 0;
+}
+
+#queda-acumulada .tab-panel.active,
+#reversao .tab-panel.active {
+  display: block;
+}
+
+.queda-acum-grid {
+  display: grid;
+  grid-template-columns: 0.28fr 0.72fr;
+  gap: 1.2rem;
+  align-items: stretch;
+  margin-top: 0.8rem;
+  height: 72vh;
+}
+
+.queda-acum-side {
+  background: rgba(255,255,255,0.55);
+  border-radius: 18px;
+  padding: 0.8rem 0.8rem 0.6rem 0.8rem;
+  overflow: hidden;
+}
+
+.queda-acum-map {
+  background: rgba(255,255,255,0.55);
+  border-radius: 18px;
+  padding: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.queda-acum-map img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ============================================================
+   PATCH FINAL V4 — valores em 2 colunas, fonte maior, sem mexer na reversão
+   ============================================================ */
+
+/* A legenda da reversão volta a ser a legenda gerada dentro do PNG pelo R.
+   Esconde qualquer legenda HTML remanescente do QMD. */
+#reversao .rev-v6-legend {
+  display: none !important;
+}
+
+/* ---------- Queda continental e queda acumulada: layout lateral em 2 colunas ---------- */
+
+#queda .queda-interactive-panel,
+#queda-acumulada .queda-interactive-panel,
+.queda-acumulada-slide .queda-interactive-panel {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1.24fr) !important;
+  gap: 0.52rem !important;
+  align-items: stretch !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* fallback caso o QMD tenha gerado values/map diretamente dentro do tab-panel */
+#queda-acumulada .queda-tab-panel:has(> .values-side-card),
+.queda-acumulada-slide .queda-tab-panel:has(> .values-side-card) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1.24fr) !important;
+  gap: 0.52rem !important;
+  align-items: stretch !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* o painel esquerdo fica visualmente cheio, sem miniaturizar a tabela */
+#queda .queda-year-card,
+#queda-acumulada .queda-year-card,
+.queda-acumulada-slide .queda-year-card {
+  height: 100% !important;
+  min-height: 0 !important;
+  padding: 0.52rem !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-auto-rows: min-content !important;
+  align-content: start !important;
+  gap: 0.18rem 0.24rem !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+#queda .queda-year-card .metric-label,
+#queda-acumulada .queda-year-card .metric-label,
+.queda-acumulada-slide .queda-year-card .metric-label,
+#queda .queda-year-card .values-note,
+#queda-acumulada .queda-year-card .values-note,
+.queda-acumulada-slide .queda-year-card .values-note {
+  grid-column: 1 / -1 !important;
+}
+
+#queda .queda-year-card .metric-label,
+#queda-acumulada .queda-year-card .metric-label,
+.queda-acumulada-slide .queda-year-card .metric-label {
+  font-size: 0.31em !important;
+  line-height: 1 !important;
+  margin-bottom: 0.08rem !important;
+}
+
+#queda .queda-year-card .value-row,
+#queda-acumulada .queda-year-card .value-row,
+.queda-acumulada-slide .queda-year-card .value-row {
+  min-height: 34px !important;
+  height: 34px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 0.24rem !important;
+  padding: 0.12rem 0.28rem !important;
+  border-radius: 10px !important;
+  box-sizing: border-box !important;
+}
+
+#queda .queda-year-card .value-row span,
+#queda-acumulada .queda-year-card .value-row span,
+.queda-acumulada-slide .queda-year-card .value-row span {
+  min-width: 0 !important;
+  font-size: 0.28em !important;
+  line-height: 1 !important;
+  font-weight: 850 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+#queda .queda-year-card .value-row strong,
+#queda-acumulada .queda-year-card .value-row strong,
+.queda-acumulada-slide .queda-year-card .value-row strong {
+  font-size: 0.34em !important;
+  line-height: 1 !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+}
+
+#queda .queda-year-card .values-note,
+#queda-acumulada .queda-year-card .values-note,
+.queda-acumulada-slide .queda-year-card .values-note {
+  margin-top: 0.08rem !important;
+  padding-top: 0.04rem !important;
+  font-size: 0.22em !important;
+  line-height: 1.10 !important;
+}
+
+/* O mapa continua grande, mas sem esmagar a caixa de valores */
+#queda .main-map-panel,
+#queda-acumulada .main-map-panel,
+.queda-acumulada-slide .main-map-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+  background: $white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 18px;
+  padding: 0.16rem !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#queda .main-map-panel img.dash-map-img,
+#queda-acumulada .main-map-panel img.dash-map-img,
+.queda-acumulada-slide .main-map-panel img.dash-map-img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 98% !important;
+  max-height: 96% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Queda acumulada: garante altura correta mesmo sem id perfeito no header */
+#queda-acumulada .queda-acumulada-slide,
+.queda-acumulada-slide {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.48rem !important;
+  overflow: hidden !important;
+}
+
+#queda-acumulada .queda-tabs-shell,
+.queda-acumulada-slide .queda-tabs-shell {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+#queda-acumulada .queda-tab-panel,
+.queda-acumulada-slide .queda-tab-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* ============================================================
+   PATCH FINAL V6 — queda mais legível + reversão sem cortes
+   Colar no FINAL do custom.scss, depois do patch v5.
+   ============================================================ */
+
+
+/* ---------- QUEDA / QUEDA ACUMULADA: painel de valores maior e mais legível ---------- */
+
+#queda .queda-interactive-panel,
+#queda-acumulada .queda-interactive-panel {
+  grid-template-columns: 0.88fr 1.12fr !important;
+  gap: 0.46rem !important;
+}
+
+/* dá um pouco mais de corpo ao card de valores */
+#queda .queda-year-card,
+#queda-acumulada .queda-year-card {
+  padding: 0.58rem 0.56rem !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.19rem 0.24rem !important;
+  align-content: start !important;
+}
+
+/* título interno da lista */
+#queda .queda-year-card .metric-label,
+#queda-acumulada .queda-year-card .metric-label {
+  font-size: 0.32em !important;
+  line-height: 1 !important;
+  margin-bottom: 0.12rem !important;
+}
+
+/* linhas maiores, mas ainda cabendo em duas colunas */
+#queda .queda-year-card .value-row,
+#queda-acumulada .queda-year-card .value-row {
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0.12rem 0.30rem !important;
+  border-radius: 11px !important;
+  gap: 0.24rem !important;
+}
+
+#queda .queda-year-card .value-row span,
+#queda-acumulada .queda-year-card .value-row span {
+  font-size: 0.31em !important;
+  line-height: 1 !important;
+  font-weight: 850 !important;
+}
+
+#queda .queda-year-card .value-row strong,
+#queda-acumulada .queda-year-card .value-row strong {
+  font-size: 0.38em !important;
+  line-height: 1 !important;
+  font-weight: 950 !important;
+}
+
+/* nota um pouco maior, mas sem roubar altura */
+#queda .queda-year-card .values-note,
+#queda-acumulada .queda-year-card .values-note {
+  padding-top: 0.18rem !important;
+  font-size: 0.23em !important;
+  line-height: 1.10 !important;
+}
+
+/* evita o mapa encolher demais apesar do card maior */
+#queda .main-map-panel,
+#queda-acumulada .main-map-panel {
+  padding: 0.10rem !important;
+}
+
+#queda .main-map-panel img.dash-map-img,
+#queda-acumulada .main-map-panel img.dash-map-img {
+  max-width: 99% !important;
+  max-height: 96% !important;
+}
+
+
+/* ---------- REVERSÃO: ranking volta a caber, tópicos ficam visíveis ---------- */
+
+/* meio-termo: ranking não fica espremido em cima, mas brief ganha altura */
+#reversao .rev-v6-side {
+  grid-template-rows: minmax(0, 0.60fr) minmax(0, 0.40fr) !important;
+  gap: 0.30rem !important;
+}
+
+/* não deixa o PNG do ranking colar/cortar no topo */
+#reversao .rev-v6-rank {
+  padding: 0.24rem 0.20rem 0.20rem 0.20rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+#reversao .rev-v6-rank img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 96% !important;
+  max-height: 86% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* força os três tópicos a dividirem o espaço disponível */
+#reversao .rev-v6-brief {
+  padding: 0.26rem !important;
+  display: grid !important;
+  grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.14rem !important;
+  overflow: hidden !important;
+}
+
+#reversao .rev-v6-brief-item {
+  min-height: 0 !important;
+  padding: 0.18rem 0.26rem !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+#reversao .rev-v6-brief-item strong {
+  font-size: 0.24em !important;
+  line-height: 1.02 !important;
+  margin-bottom: 0.03rem !important;
+}
+
+#reversao .rev-v6-brief-item span {
+  font-size: 0.19em !important;
+  line-height: 1.06 !important;
+}
+
+/* ============================================================
+   REVERSÃO — tópicos em linha para não cortar
+   Cola no FINAL do custom.scss
+   ============================================================ */
+
+/* mantém a divisão geral que já deixou o ranking aparecer */
+#reversao .rev-v6-side {
+  grid-template-rows: minmax(0, 0.62fr) minmax(0, 0.38fr) !important;
+  gap: 0.26rem !important;
+}
+
+/* ranking continua centralizado e sem cortar */
+#reversao .rev-v6-rank {
+  padding: 0.18rem 0.18rem 0.16rem 0.18rem !important;
+  overflow: hidden !important;
+}
+
+#reversao .rev-v6-rank img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 96% !important;
+  max-height: 90% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* aqui é o ponto: os 3 tópicos viram 3 colunas */
+#reversao .rev-v6-brief {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 0.22rem !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  gap: 0.16rem !important;
+  overflow: hidden !important;
+}
+
+#reversao .rev-v6-brief-item {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 0.24rem 0.26rem !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+#reversao .rev-v6-brief-item strong {
+  display: block !important;
+  font-size: 0.32em !important;
+  line-height: 1.05 !important;
+  margin-bottom: 0.07rem !important;
+}
+
+#reversao .rev-v6-brief-item span {
+  display: block !important;
+  font-size: 0.245em !important;
+  line-height: 1.10 !important;
+}
+
+/* ============================================================
+   REVERSÃO — texto dos tópicos maior, sem mexer nas caixas
+   ============================================================ */
+
+#reversao .rev-v6-brief-item {
+  padding: 0.30rem 0.34rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+#reversao .rev-v6-brief-item strong {
+  display: block !important;
+  font-size: 18px !important;
+  line-height: 1.05 !important;
+  margin-bottom: 6px !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+}
+
+#reversao .rev-v6-brief-item span {
+  display: block !important;
+  font-size: 12.5px !important;
+  line-height: 1.18 !important;
+  font-weight: 650 !important;
+}
+
+/* ============================================================
+   QUEDA CONTINENTAL — igualar ao design da queda acumulada
+   Referência visual: #queda-acumulada
+   ============================================================ */
+
+/* o slide de queda continental passa a usar a mesma lógica do acumulado */
+#queda .queda-interactive {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.48rem !important;
+  overflow: hidden !important;
+}
+
+#queda .queda-tabs-shell {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+#queda .queda-tab-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* mesma proporção do acumulado */
+#queda .queda-interactive-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 0.88fr 1.12fr !important;
+  gap: 0.46rem !important;
+  overflow: hidden !important;
+}
+
+/* mesma caixa lateral do acumulado */
+#queda .queda-year-card {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  padding: 0.58rem 0.56rem !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-auto-rows: min-content !important;
+  align-content: start !important;
+  gap: 0.19rem 0.24rem !important;
+}
+
+#queda .queda-year-card .metric-label,
+#queda .queda-year-card .values-note {
+  grid-column: 1 / -1 !important;
+}
+
+#queda .queda-year-card .metric-label {
+  font-size: 0.32em !important;
+  line-height: 1 !important;
+  margin-bottom: 0.12rem !important;
+}
+
+#queda .queda-year-card .value-row {
+  min-height: 36px !important;
+  height: 36px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 0.24rem !important;
+  padding: 0.12rem 0.30rem !important;
+  border-radius: 11px !important;
+  box-sizing: border-box !important;
+}
+
+#queda .queda-year-card .value-row span {
+  min-width: 0 !important;
+  font-size: 0.31em !important;
+  line-height: 1 !important;
+  font-weight: 850 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+#queda .queda-year-card .value-row strong {
+  font-size: 0.38em !important;
+  line-height: 1 !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+}
+
+#queda .queda-year-card .values-note {
+  padding-top: 0.18rem !important;
+  font-size: 0.23em !important;
+  line-height: 1.10 !important;
+}
+
+/* mesma caixa do mapa do acumulado */
+#queda .main-map-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(16, 42, 67, 0.10) !important;
+  border-radius: 18px !important;
+  padding: 0.10rem !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ajuste específico: o PNG da queda continental estava menor que o acumulado */
+#queda .main-map-panel img.dash-map-img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 104% !important;
+  max-height: 102% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+
+  /* zoom leve só no mapa da queda continental */
+  transform: scale(1.055) !important;
+  transform-origin: center center !important;
+}
+
+/* ============================================================
+   SIMILARIDADE — abas interativas por região
+   Cola no FINAL do custom.scss.
+   ============================================================ */
+
+#similaridade .similarity-interactive {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.42rem !important;
+  overflow: hidden !important;
+}
+
+#similaridade .similarity-tabs-shell {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+#similaridade .similarity-tab-panel {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+#similaridade .similarity-main-layout {
+  height: 100% !important;
+  min-height: 0 !important;
+  grid-template-columns: 1.52fr 0.78fr !important;
+  gap: 0.56rem !important;
+  align-items: stretch !important;
+  overflow: hidden !important;
+}
+
+#similaridade .region-tabs-horizontal {
+  flex-wrap: nowrap !important;
+  gap: 0.30rem !important;
+}
+
+#similaridade button.region-pill {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  border: 1px solid rgba(16, 42, 67, 0.12) !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  white-space: nowrap !important;
+  padding: 0.27rem 0.43rem !important;
+  font-size: 0.29em !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+#similaridade button.region-pill.active {
+  background: #102A43 !important;
+  color: #FFFFFF !important;
+  border-color: #102A43 !important;
+}
+
+#similaridade .main-plot-panel {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+#similaridade .main-plot-panel img.dash-plot-img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 99% !important;
+  max-height: 96% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+}
+
+#similaridade .similarity-side-panel {
+  min-height: 0 !important;
+  grid-template-rows: 0.37fr 0.63fr !important;
+  gap: 0.40rem !important;
+  overflow: hidden !important;
+}
+
+#similaridade .native-summary-card {
+  min-height: 0 !important;
+  padding: 0.58rem !important;
+  overflow: hidden !important;
+}
+
+#similaridade .native-region-name {
+  font-size: 1.02em !important;
+  margin-top: 0.04rem !important;
+}
+
+#similaridade .native-metrics-grid {
+  margin-top: 0.30rem !important;
+  gap: 0.22rem !important;
+}
+
+#similaridade .native-metrics-grid div {
+  padding: 0.28rem 0.28rem !important;
+}
+
+#similaridade .native-metrics-grid span {
+  font-size: 0.22em !important;
+}
+
+#similaridade .native-metrics-grid strong {
+  font-size: 0.42em !important;
+}
+
+#similaridade .native-match-list {
+  margin-top: 0.28rem !important;
+  gap: 0.15rem !important;
+}
+
+#similaridade .native-match-list span {
+  font-size: 0.28em !important;
+  padding: 0.17rem 0.34rem !important;
+}
+
+#similaridade .small-plot-panel {
+  min-height: 0 !important;
+  padding: 0.10rem !important;
+  overflow: hidden !important;
+}
+
+#similaridade .small-plot-panel img.dash-plot-img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 99% !important;
+  max-height: 99% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+}

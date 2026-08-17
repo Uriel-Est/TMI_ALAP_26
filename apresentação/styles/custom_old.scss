@@ -1,0 +1,1520 @@
+/* styles/custom.scss */
+
+/*-- scss:defaults --*/
+
+$body-bg: #F6E8E8;
+$body-color: #102A43;
+$link-color: #1CA7C9;
+$presentation-heading-color: #102A43;
+$presentation-heading-font-weight: 700;
+
+/*-- scss:rules --*/
+
+.reveal {
+  font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.reveal .slide {
+  color: #102A43;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  letter-spacing: -0.02em;
+}
+
+.title-slide {
+  background: #F6E8E8;
+}
+
+.cover-grid {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 2rem;
+  align-items: end;
+  height: 72vh;
+}
+
+.cover-kicker {
+  color: #0F766E;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  margin-bottom: 1rem;
+}
+
+.cover-title {
+  font-size: 2.15em;
+  line-height: 1.05;
+  font-weight: 800;
+  color: #102A43;
+  max-width: 950px;
+}
+
+.cover-subtitle {
+  margin-top: 1rem;
+  color: #0F766E;
+  font-size: 1.15em;
+  font-weight: 500;
+}
+
+.cover-authors {
+  margin-top: 2.2rem;
+  font-size: 0.72em;
+  color: #102A43;
+}
+
+.cover-affiliations {
+  margin-top: 1.2rem;
+  font-size: 0.52em;
+  color: #64748B;
+}
+
+.cover-logo-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.7rem;
+}
+
+.cover-line {
+  width: 180px;
+  height: 3px;
+  background: #1CA7C9;
+  border-radius: 999px;
+}
+
+.cover-logo {
+  width: 180px;
+  height: auto;
+}
+
+.section-tag {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(28, 167, 201, 0.14);
+  color: #0F766E;
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.big-claim {
+  font-size: 1.55em;
+  line-height: 1.08;
+  font-weight: 800;
+  color: #102A43;
+  max-width: 1050px;
+}
+
+.muted {
+  color: #64748B;
+}
+
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+.metric-label {
+  font-size: 0.58em;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.metric-value {
+  font-size: 1.7em;
+  font-weight: 800;
+  color: #102A43;
+  margin-top: 0.25rem;
+}
+
+.metric-note {
+  font-size: 0.58em;
+  color: #64748B;
+  margin-top: 0.25rem;
+}
+
+.footer-note {
+  position: absolute;
+  left: 3.5rem;
+  bottom: 1.2rem;
+  font-size: 0.46em;
+  color: #64748B;
+}
+
+.quad-map-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+.placeholder-map {
+  min-height: 390px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px dashed rgba(16, 42, 67, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #64748B;
+}
+
+.placeholder-map.large {
+  min-height: 500px;
+}
+
+.placeholder-year {
+  font-size: 2em;
+  font-weight: 800;
+  color: #102A43;
+}
+
+.placeholder-text {
+  margin-top: 0.4rem;
+  font-size: 0.58em;
+  color: #64748B;
+}
+
+.similarity-layout {
+  display: grid;
+  grid-template-columns: 180px 1.2fr 1fr;
+  gap: 1rem;
+  margin-top: 1.6rem;
+  align-items: stretch;
+}
+
+.region-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.region-pill {
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 42, 67, 0.14);
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 0.58em;
+  font-weight: 700;
+  color: #102A43;
+}
+
+.region-pill.active {
+  background: #102A43;
+  color: white;
+}
+
+.similarity-main-card,
+.similarity-country-card,
+.ranking-card {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 22px;
+  padding: 1.2rem;
+}
+
+.similarity-region {
+  font-size: 2.8em;
+  font-weight: 800;
+  color: #102A43;
+  margin-top: 0.4rem;
+}
+
+.similarity-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+.similarity-stats div {
+  background: rgba(28, 167, 201, 0.10);
+  border-radius: 16px;
+  padding: 0.8rem;
+  font-size: 0.72em;
+}
+
+.country-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+}
+
+.country-list span {
+  font-size: 1.2em;
+  font-weight: 800;
+  color: #102A43;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  background: rgba(15, 118, 110, 0.10);
+}
+
+.timeline-placeholder {
+  margin-top: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.timeline-row span {
+  font-size: 0.72em;
+  font-weight: 700;
+  color: #102A43;
+}
+
+.timeline-line {
+  position: relative;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(16, 42, 67, 0.12);
+}
+
+.event {
+  position: absolute;
+  top: 0;
+  height: 18px;
+  border-radius: 999px;
+}
+
+.event.stagnation {
+  background: #F59E0B;
+}
+
+.event.reversal {
+  background: #C2410C;
+}
+
+.timeline-legend {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.58em;
+  color: #64748B;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  margin-right: 0.35rem;
+}
+
+.stagnation-dot {
+  background: #F59E0B;
+}
+
+.reversal-dot {
+  background: #C2410C;
+}
+
+.map-bars-layout {
+  display: grid;
+  grid-template-columns: 1.7fr 0.95fr;
+  gap: 1.1rem;
+  margin-top: 1.5rem;
+  align-items: stretch;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 92px 1fr 48px;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  font-size: 0.56em;
+}
+
+.mini-bar {
+  height: 10px;
+  background: rgba(16, 42, 67, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.mini-bar div {
+  height: 10px;
+  background: #C2410C;
+  border-radius: 999px;
+}
+
+/* ============================================================
+   Ajuste geral de layout Reveal + dashboard
+   ============================================================ */
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal section.slide {
+  padding: 46px 90px 48px 150px !important;
+  box-sizing: border-box;
+}
+
+.reveal section.title-slide {
+  padding: 70px 95px 55px 150px !important;
+}
+
+.reveal .title-slide h2 {
+  display: none;
+}
+
+.reveal h2 {
+  font-size: 1.00em;
+  line-height: 1.05;
+  margin: 0 0 0.50rem 0;
+  color: #102A43;
+  font-weight: 760;
+  letter-spacing: -0.035em;
+}
+
+.section-tag {
+  margin-top: 0.15rem;
+  margin-bottom: 0.60rem;
+  padding: 0.18rem 0.50rem;
+  font-size: 0.45em;
+}
+
+.big-claim {
+  font-size: 1.08em;
+  line-height: 1.12;
+  font-weight: 800;
+  max-width: 980px;
+  margin: 0.35rem 0 1.05rem 0;
+  color: #102A43;
+  letter-spacing: -0.035em;
+}
+
+/* ============================================================
+   Capa
+   ============================================================ */
+
+.cover-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  gap: 2.2rem;
+  align-items: end;
+  min-height: 680px;
+}
+
+.cover-kicker {
+  font-size: 0.54em;
+  margin-bottom: 0.75rem;
+}
+
+.cover-title {
+  font-size: 1.72em;
+  line-height: 1.06;
+  max-width: 1040px;
+}
+
+.cover-subtitle {
+  font-size: 0.72em;
+  margin-top: 0.8rem;
+}
+
+.cover-authors {
+  font-size: 0.48em;
+  margin-top: 2.0rem;
+}
+
+.cover-affiliations {
+  font-size: 0.38em;
+  margin-top: 0.9rem;
+}
+
+.cover-logo {
+  width: 170px;
+}
+
+.cover-line {
+  width: 170px;
+  height: 3px;
+}
+
+/* ============================================================
+   Sumário lateral ALAP
+   ============================================================ */
+
+.alap-side-nav {
+  position: fixed;
+  z-index: 9999;
+  left: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  pointer-events: auto;
+}
+
+.alap-side-nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #0F766E;
+  opacity: 0.52;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.alap-side-nav a:hover,
+.alap-side-nav a.active {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 2px solid #1CA7C9;
+  background: transparent;
+}
+
+.alap-side-nav a.active .nav-dot {
+  background: #1CA7C9;
+}
+
+.nav-label {
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0F766E;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity 160ms ease, max-width 160ms ease;
+}
+
+.alap-side-nav a:hover .nav-label,
+.alap-side-nav a.active .nav-label {
+  opacity: 1;
+  max-width: 120px;
+}
+
+/* ============================================================
+   Cards e grids compactos
+   ============================================================ */
+
+.card-row {
+  gap: 0.72rem;
+  margin-top: 1.0rem;
+}
+
+.metric-card {
+  border-radius: 16px;
+  padding: 0.78rem 0.85rem;
+}
+
+.metric-label {
+  font-size: 0.42em;
+}
+
+.metric-value {
+  font-size: 1.12em;
+  margin-top: 0.16rem;
+}
+
+.metric-note {
+  font-size: 0.42em;
+  line-height: 1.18;
+}
+
+/* ============================================================
+   Grid de mapas
+   ============================================================ */
+
+.quad-map-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.placeholder-map {
+  min-height: 330px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px dashed rgba(16, 42, 67, 0.18);
+}
+
+.placeholder-map.large {
+  min-height: 430px;
+}
+
+.placeholder-year {
+  font-size: 1.45em;
+  letter-spacing: -0.04em;
+}
+
+.placeholder-text {
+  font-size: 0.42em;
+  margin-top: 0.25rem;
+}
+
+/* ============================================================
+   Similaridade
+   ============================================================ */
+
+.similarity-layout {
+  grid-template-columns: 170px 1.15fr 0.95fr;
+  gap: 0.8rem;
+  margin-top: 1.05rem;
+}
+
+.region-pill {
+  font-size: 0.44em;
+  padding: 0.42rem 0.62rem;
+}
+
+.similarity-main-card,
+.similarity-country-card,
+.ranking-card {
+  border-radius: 18px;
+  padding: 0.95rem;
+}
+
+.similarity-region {
+  font-size: 1.95em;
+}
+
+.similarity-stats {
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.similarity-stats div {
+  font-size: 0.52em;
+  padding: 0.62rem;
+}
+
+.country-list {
+  gap: 0.5rem;
+}
+
+.country-list span {
+  font-size: 0.78em;
+  padding: 0.55rem 0.75rem;
+}
+
+/* ============================================================
+   Timeline
+   ============================================================ */
+
+.timeline-placeholder {
+  margin-top: 1.0rem;
+  gap: 0.58rem;
+}
+
+.timeline-row {
+  grid-template-columns: 155px 1fr;
+}
+
+.timeline-row span {
+  font-size: 0.50em;
+}
+
+.timeline-line,
+.event {
+  height: 14px;
+}
+
+.timeline-legend {
+  font-size: 0.43em;
+  margin-top: 0.7rem;
+}
+
+/* ============================================================
+   Mapa + barras
+   ============================================================ */
+
+.map-bars-layout {
+  grid-template-columns: 1.65fr 0.9fr;
+  gap: 0.85rem;
+  margin-top: 0.8rem;
+}
+
+.bar-row {
+  grid-template-columns: 82px 1fr 42px;
+  gap: 0.42rem;
+  margin-top: 0.62rem;
+  font-size: 0.42em;
+}
+
+.mini-bar,
+.mini-bar div {
+  height: 8px;
+}
+
+/* ============================================================
+   Dashboard map slides
+   ============================================================ */
+
+.dashboard-slide h2 {
+  display: none;
+}
+
+.dash-map-shell,
+.similarity-dash,
+.timeline-dash,
+.reversal-dash {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-map-topbar,
+.similarity-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.dash-map-topbar.compact {
+  margin-bottom: 0.45rem;
+}
+
+.dash-title {
+  font-size: 0.95em;
+  line-height: 1.05;
+  font-weight: 800;
+  color: #102A43;
+  letter-spacing: -0.035em;
+}
+
+.dash-subtitle {
+  margin-top: 0.28rem;
+  font-size: 0.42em;
+  line-height: 1.25;
+  color: #64748B;
+  max-width: 760px;
+}
+
+.year-tabs,
+.region-tabs-horizontal {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.year-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.74rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  color: #102A43;
+  font-size: 0.42em;
+  font-weight: 800;
+}
+
+.year-tab.active {
+  background: #102A43;
+  color: white;
+}
+
+.dash-map-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.map-placeholder-full {
+  height: 100%;
+  min-height: 560px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px dashed rgba(16, 42, 67, 0.16);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #64748B;
+}
+
+.map-insight-card {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  width: 310px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 18px;
+  padding: 0.85rem;
+}
+
+/* ============================================================
+   Similarity rich dashboard
+   ============================================================ */
+
+.similarity-grid-rich {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 0.85fr 1.45fr 0.9fr;
+  gap: 0.85rem;
+}
+
+.region-profile-card,
+.series-card,
+.matches-card {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 22px;
+  padding: 0.95rem;
+}
+
+.mini-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.mini-metrics-grid div {
+  background: rgba(28, 167, 201, 0.10);
+  border-radius: 14px;
+  padding: 0.65rem;
+}
+
+.mini-metrics-grid span {
+  display: block;
+  font-size: 0.38em;
+  color: #64748B;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.mini-metrics-grid strong {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.80em;
+  color: #102A43;
+}
+
+.series-placeholder {
+  height: 430px;
+  border-radius: 18px;
+  border: 1px dashed rgba(16, 42, 67, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  font-size: 0.52em;
+  margin-top: 0.8rem;
+  text-align: center;
+}
+
+.match-row {
+  display: grid;
+  grid-template-columns: 96px 1fr 32px;
+  align-items: center;
+  gap: 0.48rem;
+  font-size: 0.43em;
+  margin-top: 0.58rem;
+}
+
+.donut-placeholder {
+  margin-top: 1.1rem;
+  height: 140px;
+  border-radius: 18px;
+  border: 1px dashed rgba(16, 42, 67, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  font-size: 0.42em;
+  line-height: 1.25;
+  text-align: center;
+}
+
+/* ============================================================
+   Timeline with x-axis
+   ============================================================ */
+
+.timeline-axis {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin-left: 155px;
+  margin-bottom: 0.25rem;
+  color: #64748B;
+  font-size: 0.38em;
+  font-weight: 800;
+}
+
+.timeline-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+.country-row span {
+  color: #64748B;
+}
+
+/* ============================================================
+   Reversal map-dominant layout
+   ============================================================ */
+
+.reversal-map-layout {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.reversal-map {
+  min-height: 620px;
+}
+
+.floating-ranking-card {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 360px;
+  background: rgba(255, 255, 255, 0.90);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 20px;
+  padding: 0.95rem;
+}
+
+/* ============================================================
+   References
+   ============================================================ */
+
+.refs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.2rem;
+  margin-top: 1.4rem;
+  font-size: 0.58em;
+  line-height: 1.35;
+}
+
+.refs-grid li {
+  margin-bottom: 0.55rem;
+}
+
+/* ============================================================
+   Ajustes: motivação + score composition
+   ============================================================ */
+
+.big-claim.compact {
+  font-size: 0.92em;
+  max-width: 760px;
+  margin-bottom: 0.7rem;
+}
+
+.motivation-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 0.85fr;
+  gap: 1rem;
+  align-items: stretch;
+  margin-top: 0.4rem;
+}
+
+.motivation-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.motivation-text {
+  font-size: 0.48em;
+  line-height: 1.35;
+  color: #64748B;
+  max-width: 760px;
+}
+
+.motivation-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.score-composition-card {
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 22px;
+  padding: 0.9rem;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.score-title {
+  color: #102A43;
+  font-weight: 800;
+  font-size: 0.70em;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.score-badge {
+  background: rgba(28, 167, 201, 0.14);
+  color: #0F766E;
+  border-radius: 999px;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.40em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.score-components {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.55rem;
+}
+
+.score-component {
+  background: rgba(28, 167, 201, 0.08);
+  border: 1px solid rgba(28, 167, 201, 0.16);
+  border-radius: 16px;
+  padding: 0.68rem;
+  min-height: 120px;
+}
+
+.score-component span {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+  background: #102A43;
+  color: white;
+  font-size: 0.38em;
+  font-weight: 900;
+  margin-bottom: 0.45rem;
+}
+
+.score-component strong {
+  display: block;
+  font-size: 0.56em;
+  color: #102A43;
+  font-weight: 900;
+  margin-bottom: 0.18rem;
+}
+
+.score-component small {
+  display: block;
+  font-size: 0.38em;
+  line-height: 1.18;
+  color: #64748B;
+}
+
+/* ============================================================
+   Year rail: controle temporal do mapa
+   ============================================================ */
+
+.year-rail-box {
+  width: 460px;
+  padding-top: 0.25rem;
+}
+
+.year-rail {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.55rem;
+}
+
+.year-rail::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 50%;
+  border-top: 2px dashed rgba(16, 42, 67, 0.22);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.year-tick {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 74px;
+  height: 38px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.90);
+  border: 1px solid rgba(16, 42, 67, 0.14);
+  color: #102A43;
+  font-size: 0.42em;
+  font-weight: 900;
+}
+
+.year-tick.active {
+  background: #102A43;
+  color: white;
+}
+
+.year-rail-caption {
+  text-align: center;
+  color: #64748B;
+  font-size: 0.36em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* mapa ainda mais protagonista */
+.dash-map-stage {
+  flex: 1;
+  min-height: 0;
+}
+
+.map-placeholder-full {
+  min-height: 610px;
+}
+
+/* ============================================================
+   Imagens reais dentro dos frames de mapa
+   ============================================================ */
+
+.map-frame {
+  position: relative;
+  height: 100%;
+  min-height: 610px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.80);
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-frame.reversal-map {
+  min-height: 640px;
+}
+
+.dash-map-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* deixa o card sobre o mapa, mas menor */
+.map-insight-card {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.85rem;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  border-radius: 18px;
+  padding: 0.75rem;
+}
+
+.map-insight-card .metric-value {
+  font-size: 0.82em;
+}
+
+.map-insight-card .metric-note {
+  font-size: 0.38em;
+  line-height: 1.22;
+}
+
+/* ============================================================
+   Layout final dos slides de resultado com figuras reais
+   ============================================================ */
+
+.dashboard-slide h2 {
+  display: none;
+}
+
+.dash-result {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dash-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 0.25rem;
+}
+
+.dash-title {
+  font-size: 0.88em;
+  line-height: 1.05;
+  font-weight: 850;
+  color: #102A43;
+  letter-spacing: -0.035em;
+  max-width: 980px;
+}
+
+.dash-subtitle {
+  margin-top: 0.28rem;
+  font-size: 0.40em;
+  line-height: 1.22;
+  color: #64748B;
+  max-width: 850px;
+}
+
+.section-tag {
+  margin-bottom: 0.36rem;
+}
+
+/* ============================================================
+   Frames de imagem
+   ============================================================ */
+
+.map-panel,
+.full-plot-panel,
+.main-plot-panel,
+.small-plot-panel,
+.score-heatmap-panel,
+.reversal-map-panel,
+.reversal-ranking-panel {
+  background: white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-panel {
+  flex: 1;
+  min-height: 615px;
+}
+
+.full-plot-panel {
+  flex: 1;
+  min-height: 610px;
+}
+
+.main-plot-panel {
+  min-height: 560px;
+}
+
+.small-plot-panel {
+  min-height: 250px;
+}
+
+.score-heatmap-panel {
+  min-height: 555px;
+}
+
+.reversal-map-panel {
+  min-height: 610px;
+}
+
+.reversal-ranking-panel {
+  min-height: 610px;
+}
+
+.dash-plot-img,
+.map-plot-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* Choropleth precisa respirar mais */
+.map-plot-img {
+  padding: 0.15rem;
+}
+
+/* ============================================================
+   Similaridade
+   ============================================================ */
+
+.similarity-main-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.55fr 0.72fr;
+  gap: 0.85rem;
+  align-items: stretch;
+}
+
+.similarity-side-panel {
+  display: grid;
+  grid-template-rows: 0.95fr 1fr;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.native-summary-card {
+  background: white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 20px;
+  padding: 0.90rem;
+}
+
+.native-region-name {
+  margin-top: 0.12rem;
+  font-size: 1.45em;
+  line-height: 1;
+  font-weight: 900;
+  color: #102A43;
+  letter-spacing: -0.04em;
+}
+
+.native-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.native-metrics-grid div {
+  border-radius: 14px;
+  background: rgba(28, 167, 201, 0.09);
+  border: 1px solid rgba(28, 167, 201, 0.12);
+  padding: 0.55rem 0.45rem;
+}
+
+.native-metrics-grid span {
+  display: block;
+  font-size: 0.34em;
+  line-height: 1;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 850;
+}
+
+.native-metrics-grid strong {
+  display: block;
+  margin-top: 0.18rem;
+  font-size: 0.66em;
+  line-height: 1;
+  color: #102A43;
+  font-weight: 900;
+}
+
+.native-match-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  margin-top: 0.80rem;
+}
+
+.native-match-list span {
+  display: block;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.10);
+  color: #0F766E;
+  font-size: 0.42em;
+  font-weight: 850;
+  padding: 0.34rem 0.55rem;
+}
+
+/* ============================================================
+   Score / heatmap
+   ============================================================ */
+
+.score-slide-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 0.62fr 1.55fr;
+  gap: 0.85rem;
+  align-items: stretch;
+}
+
+.score-explain-card {
+  background: white;
+  border: 1px solid rgba(16, 42, 67, 0.10);
+  border-radius: 20px;
+  padding: 0.90rem;
+}
+
+.score-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.score-mini-list div {
+  padding: 0.50rem 0.58rem;
+  border-radius: 14px;
+  background: rgba(28, 167, 201, 0.08);
+  border: 1px solid rgba(28, 167, 201, 0.13);
+}
+
+.score-mini-list strong {
+  display: block;
+  font-size: 0.44em;
+  color: #102A43;
+  font-weight: 900;
+  margin-bottom: 0.08rem;
+}
+
+.score-mini-list span {
+  display: block;
+  font-size: 0.34em;
+  color: #64748B;
+  line-height: 1.15;
+}
+
+.score-note {
+  margin-top: 0.70rem;
+  font-size: 0.36em;
+  line-height: 1.20;
+  color: #64748B;
+}
+
+/* ============================================================
+   Reversão
+   ============================================================ */
+
+.reversal-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.48fr 0.62fr;
+  gap: 0.85rem;
+  align-items: stretch;
+}
+
+/* ============================================================
+   Abas visuais
+   ============================================================ */
+
+.region-tabs-horizontal,
+.year-tabs {
+  display: flex;
+  gap: 0.42rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.region-pill,
+.year-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.36rem 0.62rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.80);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  color: #102A43;
+  font-size: 0.38em;
+  font-weight: 850;
+}
+
+.region-pill.active,
+.year-tab.active {
+  background: #102A43;
+  color: white;
+}
+
+/* ============================================================
+   Régua temporal
+   ============================================================ */
+
+.year-rail-box {
+  width: 430px;
+  padding-top: 0.20rem;
+}
+
+.year-rail {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.48rem;
+}
+
+.year-rail::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 50%;
+  border-top: 2px dashed rgba(16, 42, 67, 0.24);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.year-tick {
+  position: relative;
+  z-index: 1;
+  width: 68px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid rgba(16, 42, 67, 0.16);
+  color: #102A43;
+  font-size: 0.38em;
+  font-weight: 900;
+}
+
+.year-tick.active {
+  background: #102A43;
+  color: white;
+}
+
+.year-rail-caption {
+  text-align: center;
+  font-size: 0.32em;
+  color: #64748B;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
